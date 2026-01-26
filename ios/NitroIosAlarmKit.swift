@@ -1,9 +1,5 @@
-import SwiftUI
 import NitroModules
-
-#if canImport(AlarmKit)
 import AlarmKit
-#endif
 
 class HybridNitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
     

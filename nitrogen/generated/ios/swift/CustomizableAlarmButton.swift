@@ -18,7 +18,7 @@ public extension CustomizableAlarmButton {
   /**
    * Create a new instance of `CustomizableAlarmButton`.
    */
-  init(text: String, textColor: String, icon: String) {
+  init(text: String, textColor: String, icon: String?) {
     self.init(std.string(text), std.string(textColor), { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = icon {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -50,10 +50,10 @@ public extension CustomizableAlarmButton {
     }
   }
   
-  var icon: String {
+  var icon: String? {
     @inline(__always)
     get {
-      return { () -> String in
+      return { () -> String? in
         if bridge.has_value_std__optional_std__string_(self.__icon) {
           let __unwrapped = bridge.get_std__optional_std__string_(self.__icon)
           return String(__unwrapped)

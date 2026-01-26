@@ -29,7 +29,7 @@ data class CustomizableAlarmButton
     val textColor: String,
     @DoNotStrip
     @Keep
-    val icon: String
+    val icon: String?
   ) {
   /* main constructor */
 }

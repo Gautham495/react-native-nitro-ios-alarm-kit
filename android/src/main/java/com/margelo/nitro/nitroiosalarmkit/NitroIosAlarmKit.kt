@@ -1,37 +1,18 @@
-package com.nitroiosalarmkit
+package com.margelo.nitro.nitroiosalarmkit
 
+import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.Promise
 
-data class CustomizableAlarmButton(
-    val text: String,
-    val textColor: String,
-    val icon: String
-)
-
-data class AlarmCountdown(
-    val preAlert: Double?,
-    val postAlert: Double?
-)
-
-enum class AlarmWeekday {
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday
-}
-
+@DoNotStrip
 class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
 
     override fun isAvailable(): Boolean {
-        // AlarmKit is iOS 26+ only
+        // AlarmKit is iOS-only
         return false
     }
 
     override fun requestAlarmPermission(): Promise<Boolean> {
-        // No-op on Android - AlarmKit is iOS 26+ only
+        // No-op on Android
         return Promise.resolved(false)
     }
 
@@ -43,7 +24,7 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         timestamp: Double?,
         countdown: AlarmCountdown?
     ): Promise<Boolean> {
-        // No-op on Android - AlarmKit is iOS 26+ only
+        // No-op on Android
         return Promise.resolved(false)
     }
 
@@ -53,11 +34,11 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         tintColor: String,
         hour: Double,
         minute: Double,
-        repeats: List<AlarmWeekday>,
+        repeats: Array<AlarmWeekday>,
         secondaryBtn: CustomizableAlarmButton?,
         countdown: AlarmCountdown?
     ): Promise<Boolean> {
-        // No-op on Android - AlarmKit is iOS 26+ only
+        // No-op on Android
         return Promise.resolved(false)
     }
 }
