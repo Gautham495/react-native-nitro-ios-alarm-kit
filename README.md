@@ -66,13 +66,6 @@ Add the AlarmKit usage description to your `Info.plist`:
 <string>Your app wants to schedule alerts for alarms you create.</string>
 ```
 
-**Example:**
-
-```xml
-<key>NSAlarmKitUsageDescription</key>
-<string>SparkHabits wants to schedule alerts for alarms you create for timer and breath meditations.</string>
-```
-
 ### Android
 
 No configuration needed — all methods return `false` as AlarmKit is iOS-only.
@@ -81,12 +74,12 @@ No configuration needed — all methods return `false` as AlarmKit is iOS-only.
 
 ## 🧠 Overview
 
-| Feature | Description |
-| --- | --- |
-| **Fixed Alarms** | Schedule one-time alarms at a specific timestamp |
+| Feature             | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| **Fixed Alarms**    | Schedule one-time alarms at a specific timestamp             |
 | **Relative Alarms** | Schedule repeating alarms (daily, weekly) at a specific time |
-| **Custom UI** | Customize button text, colors, and SF Symbols icons |
-| **Countdown** | Configure pre-alert and post-alert countdown durations |
+| **Custom UI**       | Customize button text, colors, and SF Symbols icons          |
+| **Countdown**       | Configure pre-alert and post-alert countdown durations       |
 
 ---
 
@@ -127,15 +120,15 @@ import { scheduleFixedAlarm } from 'react-native-nitro-ios-alarm-kit';
 const timestamp = Date.now() / 1000 + 3600;
 
 const success = await scheduleFixedAlarm(
-  'Wake Up!',                    // title
+  'Wake Up!', // title
   {
     text: 'Stop',
     textColor: '#FFFFFF',
-    icon: 'stop.fill',           // SF Symbol
+    icon: 'stop.fill', // SF Symbol
   },
-  '#FF5733',                     // tintColor
-  undefined,                     // secondaryBtn (optional)
-  timestamp,                     // Unix timestamp in seconds
+  '#FF5733', // tintColor
+  undefined, // secondaryBtn (optional)
+  timestamp, // Unix timestamp in seconds
   { preAlert: 60, postAlert: 120 } // countdown (optional)
 );
 ```
@@ -147,21 +140,21 @@ import { scheduleRelativeAlarm } from 'react-native-nitro-ios-alarm-kit';
 
 // Schedule alarm for 8:30 AM on weekdays
 const success = await scheduleRelativeAlarm(
-  'Daily Standup',               // title
+  'Daily Standup', // title
   {
     text: 'Dismiss',
     textColor: '#FFFFFF',
     icon: 'xmark',
   },
-  '#4CAF50',                     // tintColor
-  8,                             // hour (0-23)
-  30,                            // minute (0-59)
+  '#4CAF50', // tintColor
+  8, // hour (0-23)
+  30, // minute (0-59)
   ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
   {
     text: 'Snooze',
     textColor: '#FFFFFF',
     icon: 'clock',
-  },                             // secondaryBtn (optional)
+  }, // secondaryBtn (optional)
   { preAlert: 30, postAlert: 60 } // countdown (optional)
 );
 ```
@@ -234,7 +227,7 @@ export default function App() {
         icon: 'sun.max.fill',
       },
       '#FF9500',
-      7,  // 7:00 AM
+      7, // 7:00 AM
       0,
       ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
       {
@@ -258,7 +251,8 @@ export default function App() {
         Available: {isAvailable() ? '✅ Yes' : '❌ No'}
       </Text>
       <Text style={styles.status}>
-        Authorized: {authorized === null ? '⏳ Unknown' : authorized ? '✅ Yes' : '❌ No'}
+        Authorized:{' '}
+        {authorized === null ? '⏳ Unknown' : authorized ? '✅ Yes' : '❌ No'}
       </Text>
 
       <Pressable style={styles.button} onPress={handleRequestPermission}>
@@ -326,29 +320,29 @@ Requests permission to schedule alarms. Returns `true` if authorized, `false` ot
 
 Schedules a one-time alarm at a specific Unix timestamp.
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | ✅ | Alarm title displayed to user |
-| `stopBtn` | `CustomizableAlarmButton` | ✅ | Primary stop button configuration |
-| `tintColor` | `string` | ✅ | Hex color for alarm UI (e.g., `#FF5733`) |
-| `secondaryBtn` | `CustomizableAlarmButton` | ❌ | Optional secondary button (e.g., Snooze) |
-| `timestamp` | `number` | ❌ | Unix timestamp in seconds |
-| `countdown` | `AlarmCountdown` | ❌ | Pre/post alert durations |
+| Parameter      | Type                      | Required | Description                              |
+| -------------- | ------------------------- | -------- | ---------------------------------------- |
+| `title`        | `string`                  | ✅       | Alarm title displayed to user            |
+| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration        |
+| `tintColor`    | `string`                  | ✅       | Hex color for alarm UI (e.g., `#FF5733`) |
+| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button (e.g., Snooze) |
+| `timestamp`    | `number`                  | ❌       | Unix timestamp in seconds                |
+| `countdown`    | `AlarmCountdown`          | ❌       | Pre/post alert durations                 |
 
 ### `scheduleRelativeAlarm(title, stopBtn, tintColor, hour, minute, repeats, secondaryBtn?, countdown?): Promise<boolean>`
 
 Schedules a repeating alarm at a specific time on given weekdays.
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | ✅ | Alarm title displayed to user |
-| `stopBtn` | `CustomizableAlarmButton` | ✅ | Primary stop button configuration |
-| `tintColor` | `string` | ✅ | Hex color for alarm UI |
-| `hour` | `number` | ✅ | Hour (0-23) |
-| `minute` | `number` | ✅ | Minute (0-59) |
-| `repeats` | `AlarmWeekday[]` | ✅ | Days to repeat |
-| `secondaryBtn` | `CustomizableAlarmButton` | ❌ | Optional secondary button |
-| `countdown` | `AlarmCountdown` | ❌ | Pre/post alert durations |
+| Parameter      | Type                      | Required | Description                       |
+| -------------- | ------------------------- | -------- | --------------------------------- |
+| `title`        | `string`                  | ✅       | Alarm title displayed to user     |
+| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration |
+| `tintColor`    | `string`                  | ✅       | Hex color for alarm UI            |
+| `hour`         | `number`                  | ✅       | Hour (0-23)                       |
+| `minute`       | `number`                  | ✅       | Minute (0-59)                     |
+| `repeats`      | `AlarmWeekday[]`          | ✅       | Days to repeat                    |
+| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button         |
+| `countdown`    | `AlarmCountdown`          | ❌       | Pre/post alert durations          |
 
 ---
 
@@ -356,14 +350,14 @@ Schedules a repeating alarm at a specific time on given weekdays.
 
 ```typescript
 interface CustomizableAlarmButton {
-  text: string;        // Button label
-  textColor: string;   // Hex color (e.g., '#FFFFFF')
-  icon?: string;       // SF Symbol name (e.g., 'stop.fill')
+  text: string; // Button label
+  textColor: string; // Hex color (e.g., '#FFFFFF')
+  icon?: string; // SF Symbol name (e.g., 'stop.fill')
 }
 
 interface AlarmCountdown {
-  preAlert?: number;   // Seconds before alarm to start countdown
-  postAlert?: number;  // Seconds after alarm before auto-dismiss
+  preAlert?: number; // Seconds before alarm to start countdown
+  postAlert?: number; // Seconds after alarm before auto-dismiss
 }
 
 type AlarmWeekday =
@@ -380,12 +374,12 @@ type AlarmWeekday =
 
 ## 🧩 Platform Support
 
-| Platform | Status |
-| --- | --- |
-| **iOS 26+** | ✅ Fully Supported |
-| **iOS < 26** | ⚠️ Returns `false` |
-| **iOS Simulator** | ⚠️ Limited support |
-| **Android** | ❌ No-op (returns `false`) |
+| Platform          | Status                     |
+| ----------------- | -------------------------- |
+| **iOS 26+**       | ✅ Fully Supported         |
+| **iOS < 26**      | ⚠️ Returns `false`         |
+| **iOS Simulator** | ⚠️ Limited support         |
+| **Android**       | ❌ No-op (returns `false`) |
 
 ---
 

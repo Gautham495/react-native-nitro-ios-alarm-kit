@@ -5,7 +5,7 @@ import com.margelo.nitro.core.Promise
 data class CustomizableAlarmButton(
     val text: String,
     val textColor: String,
-    val icon: String?
+    val icon: String
 )
 
 data class AlarmCountdown(

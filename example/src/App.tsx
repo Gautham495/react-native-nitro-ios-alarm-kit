@@ -109,12 +109,7 @@ export default function App() {
         </View>
         <View style={styles.statusRow}>
           <Text style={styles.statusLabel}>Available:</Text>
-          <Text
-            style={[
-              styles.statusValue,
-              { color: available ? '#34C759' : '#FF3B30' },
-            ]}
-          >
+          <Text style={styles.statusValue}>
             {available ? '✅ Yes' : '❌ No'}
           </Text>
         </View>
@@ -128,16 +123,16 @@ export default function App() {
                   authorized === null
                     ? '#8E8E93'
                     : authorized
-                      ? '#34C759'
-                      : '#FF3B30',
+                    ? '#34C759'
+                    : '#FF3B30',
               },
             ]}
           >
             {authorized === null
               ? '⏳ Unknown'
               : authorized
-                ? '✅ Yes'
-                : '❌ No'}
+              ? '✅ Yes'
+              : '❌ No'}
           </Text>
         </View>
       </View>
