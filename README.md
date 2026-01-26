@@ -36,22 +36,41 @@ cd ios && pod install
 
 ---
 
+## Demo
+
+<table>
+  <tr>
+    <th align="center">🍏 iOS Demo</th>
+    <th align="center">🔐 Permission Prompt</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img alt="iOS AlarmKit Demo" src="./docs/videos/iOS.gif" height="650" width="300"/>
+    </td>
+    <td align="center">
+      <img alt="AlarmKit Permission" src="./docs/images/permissions.png" height="650" width="300"/>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## ⚙️ Configuration
 
 ### iOS
 
-Add the AlarmKit capability to your app:
-
-1. Open your project in Xcode
-2. Go to **Signing & Capabilities**
-3. Click **+ Capability**
-4. Add **AlarmKit**
-
-Or add to your entitlements file:
+Add the AlarmKit usage description to your `Info.plist`:
 
 ```xml
-<key>com.apple.developer.alarmkit</key>
-<true/>
+<key>NSAlarmKitUsageDescription</key>
+<string>Your app wants to schedule alerts for alarms you create.</string>
+```
+
+**Example:**
+
+```xml
+<key>NSAlarmKitUsageDescription</key>
+<string>SparkHabits wants to schedule alerts for alarms you create for timer and breath meditations.</string>
 ```
 
 ### Android

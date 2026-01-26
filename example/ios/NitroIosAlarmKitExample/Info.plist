@@ -42,6 +42,8 @@
 	<array>
 		<string>arm64</string>
 	</array>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>App wants to schedule alerts for alarms you create for timer and breath meditations.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
