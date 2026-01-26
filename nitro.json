@@ -1,0 +1,17 @@
+{
+  "cxxNamespace": ["nitroiosalarmkit"],
+  "ios": {
+    "iosModuleName": "NitroIosAlarmKit"
+  },
+  "android": {
+    "androidNamespace": ["nitroiosalarmkit"],
+    "androidCxxLibName": "nitroiosalarmkit"
+  },
+  "autolinking": {
+    "NitroIosAlarmKit": {
+      "swift": "NitroIosAlarmKit",
+      "kotlin": "NitroIosAlarmKit"
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
