@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.81.4):
     - hermes-engine/Pre-built (= 0.81.4)
   - hermes-engine/Pre-built (0.81.4)
-  - NitroIosAlarmKit (1.0.6):
+  - NitroIosAlarmKit (1.0.7):
     - boost
     - DoubleConversion
     - fast_float
@@ -2553,7 +2553,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 35c763d57c9832d0eef764316ca1c4d043581394
-  NitroIosAlarmKit: 93c3e444f9840b2240ae467d6d3a0f62b7cbcd29
+  NitroIosAlarmKit: 3fba4d09294d4cb73335169a85754693c0354e10
   NitroModules: 808eee1dfaf75b2c5a63ea3608cb651cc7d13687
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: c0ed3249a97243002615517dff789bf4666cf585
