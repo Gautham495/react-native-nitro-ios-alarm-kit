@@ -1,4 +1,4 @@
-package nitroiosalarmkitexample
+package com.nitroalarmkitexample
 
 import android.app.Application
 import com.facebook.react.PackageList
