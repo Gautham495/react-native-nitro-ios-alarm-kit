@@ -14,10 +14,11 @@ namespace margelo::nitro::nitroiosalarmkit {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerHybridMethod("isAvailable", &HybridNitroIosAlarmKitSpec::isAvailable);
       prototype.registerHybridMethod("requestAlarmPermission", &HybridNitroIosAlarmKitSpec::requestAlarmPermission);
       prototype.registerHybridMethod("scheduleFixedAlarm", &HybridNitroIosAlarmKitSpec::scheduleFixedAlarm);
       prototype.registerHybridMethod("scheduleRelativeAlarm", &HybridNitroIosAlarmKitSpec::scheduleRelativeAlarm);
-      prototype.registerHybridMethod("isAvailable", &HybridNitroIosAlarmKitSpec::isAvailable);
+      prototype.registerHybridMethod("scheduleTimer", &HybridNitroIosAlarmKitSpec::scheduleTimer);
     });
   }
 

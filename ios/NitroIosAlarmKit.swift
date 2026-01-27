@@ -1,7 +1,13 @@
 import Foundation
 import NitroModules
 import AlarmKit
+import ActivityKit
 import SwiftUI
+
+// MARK: - Metadata (must be at file level, nonisolated for Swift 6 concurrency)
+nonisolated struct AlarmMetadataInfo: AlarmMetadata {
+    init() {}
+}
 
 class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
 
@@ -25,6 +31,7 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                     let state = try await manager.requestAuthorization()
                     return state == .authorized
                 } catch {
+                    print("❌ AlarmKit authorization error: \(error)")
                     throw error
                 }
             }
@@ -41,17 +48,19 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
         tintColor: String,
         secondaryBtn: CustomizableAlarmButton?,
         timestamp: Double?,
-        countdown: AlarmCountdown?
+        countdown: AlarmCountdown?,
+        soundName: String?
     ) throws -> NitroModules.Promise<Bool> {
         return NitroModules.Promise.async {
             #if canImport(AlarmKit)
             if #available(iOS 26.0, *) {
                 let manager = AlarmManager.shared
 
+                // Build stop button with better default icon
                 let stopButton = AlarmButton(
                     text: LocalizedStringResource(stringLiteral: stopBtn.text),
                     textColor: self.hexToColor(hex: stopBtn.textColor),
-                    systemImageName: stopBtn.icon ?? "alarm"
+                    systemImageName: stopBtn.icon ?? "checkmark.circle.fill"
                 )
 
                 let alert: AlarmPresentation.Alert
@@ -60,7 +69,7 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                     let secondaryButton = AlarmButton(
                         text: LocalizedStringResource(stringLiteral: btn.text),
                         textColor: self.hexToColor(hex: btn.textColor),
-                        systemImageName: btn.icon ?? "bell"
+                        systemImageName: btn.icon ?? "repeat.circle.fill"
                     )
 
                     alert = AlarmPresentation.Alert(
@@ -78,14 +87,13 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
 
                 let presentation = AlarmPresentation(alert: alert)
 
+                // Build countdown duration - use nil for 0 values
                 let countdownDuration = Alarm.CountdownDuration(
-                    preAlert: countdown?.preAlert,
-                    postAlert: countdown?.postAlert
+                    preAlert: countdown?.preAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil },
+                    postAlert: countdown?.postAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil }
                 )
 
-                nonisolated struct EmptyMetadata: AlarmMetadata {}
-
-                let attributes = AlarmAttributes<EmptyMetadata>(
+                let attributes = AlarmAttributes<AlarmMetadataInfo>(
                     presentation: presentation,
                     tintColor: self.hexToColor(hex: tintColor)
                 )
@@ -97,20 +105,25 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                     schedule = Alarm.Schedule.fixed(date)
                 }
 
+                // Build sound - use custom sound if provided
+                let sound = self.buildSound(soundName: soundName)
+
                 let configuration = AlarmManager.AlarmConfiguration(
                     countdownDuration: countdownDuration,
                     schedule: schedule,
                     attributes: attributes,
-                    sound: .default
+                    sound: sound
                 )
 
                 do {
-                    _ = try await manager.schedule(
+                    let alarmId = try await manager.schedule(
                         id: UUID(),
                         configuration: configuration
                     )
+                    print("✅ Fixed alarm scheduled: \(alarmId)")
                     return true
                 } catch {
+                    print("❌ Fixed alarm failed: \(error)")
                     throw error
                 }
             }
@@ -129,7 +142,8 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
         minute: Double,
         repeats: [AlarmWeekday],
         secondaryBtn: CustomizableAlarmButton?,
-        countdown: AlarmCountdown?
+        countdown: AlarmCountdown?,
+        soundName: String?
     ) throws -> NitroModules.Promise<Bool> {
         return NitroModules.Promise.async {
             #if canImport(AlarmKit)
@@ -139,7 +153,7 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                 let stopButton = AlarmButton(
                     text: LocalizedStringResource(stringLiteral: stopBtn.text),
                     textColor: self.hexToColor(hex: stopBtn.textColor),
-                    systemImageName: stopBtn.icon ?? "alarm"
+                    systemImageName: stopBtn.icon ?? "checkmark.circle.fill"
                 )
 
                 let alert: AlarmPresentation.Alert
@@ -148,7 +162,7 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                     let secondaryButton = AlarmButton(
                         text: LocalizedStringResource(stringLiteral: btn.text),
                         textColor: self.hexToColor(hex: btn.textColor),
-                        systemImageName: btn.icon ?? "bell"
+                        systemImageName: btn.icon ?? "repeat.circle.fill"
                     )
 
                     alert = AlarmPresentation.Alert(
@@ -167,13 +181,11 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                 let presentation = AlarmPresentation(alert: alert)
 
                 let countdownDuration = Alarm.CountdownDuration(
-                    preAlert: countdown?.preAlert,
-                    postAlert: countdown?.postAlert
+                    preAlert: countdown?.preAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil },
+                    postAlert: countdown?.postAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil }
                 )
 
-                nonisolated struct EmptyMetadata: AlarmMetadata {}
-
-                let attributes = AlarmAttributes<EmptyMetadata>(
+                let attributes = AlarmAttributes<AlarmMetadataInfo>(
                     presentation: presentation,
                     tintColor: self.hexToColor(hex: tintColor)
                 )
@@ -201,20 +213,99 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
                     repeats: recurrence
                 )
 
+                let sound = self.buildSound(soundName: soundName)
+
                 let configuration = AlarmManager.AlarmConfiguration(
                     countdownDuration: countdownDuration,
                     schedule: .relative(relativeSchedule),
                     attributes: attributes,
-                    sound: .default
+                    sound: sound
                 )
 
                 do {
-                    _ = try await manager.schedule(
+                    let alarmId = try await manager.schedule(
                         id: UUID(),
                         configuration: configuration
                     )
+                    print("✅ Relative alarm scheduled: \(alarmId)")
                     return true
                 } catch {
+                    print("❌ Relative alarm failed: \(error)")
+                    throw error
+                }
+            }
+            #endif
+            return false
+        }
+    }
+
+    // MARK: - Timer
+
+    func scheduleTimer(
+        title: String,
+        stopBtn: CustomizableAlarmButton,
+        tintColor: String,
+        durationSeconds: Double,
+        secondaryBtn: CustomizableAlarmButton?,
+        soundName: String?
+    ) throws -> NitroModules.Promise<Bool> {
+        return NitroModules.Promise.async {
+            #if canImport(AlarmKit)
+            if #available(iOS 26.0, *) {
+                let manager = AlarmManager.shared
+
+                let stopButton = AlarmButton(
+                    text: LocalizedStringResource(stringLiteral: stopBtn.text),
+                    textColor: self.hexToColor(hex: stopBtn.textColor),
+                    systemImageName: stopBtn.icon ?? "checkmark.circle.fill"
+                )
+
+                let alert: AlarmPresentation.Alert
+
+                if let btn = secondaryBtn {
+                    let secondaryButton = AlarmButton(
+                        text: LocalizedStringResource(stringLiteral: btn.text),
+                        textColor: self.hexToColor(hex: btn.textColor),
+                        systemImageName: btn.icon ?? "repeat.circle.fill"
+                    )
+
+                    alert = AlarmPresentation.Alert(
+                        title: LocalizedStringResource(stringLiteral: title),
+                        stopButton: stopButton,
+                        secondaryButton: secondaryButton,
+                        secondaryButtonBehavior: .countdown
+                    )
+                } else {
+                    alert = AlarmPresentation.Alert(
+                        title: LocalizedStringResource(stringLiteral: title),
+                        stopButton: stopButton
+                    )
+                }
+
+                let presentation = AlarmPresentation(alert: alert)
+
+                let attributes = AlarmAttributes<AlarmMetadataInfo>(
+                    presentation: presentation,
+                    tintColor: self.hexToColor(hex: tintColor)
+                )
+
+                let sound = self.buildSound(soundName: soundName)
+
+                let configuration = AlarmManager.AlarmConfiguration.timer(
+                    duration: TimeInterval(durationSeconds),
+                    attributes: attributes,
+                    sound: sound
+                )
+
+                do {
+                    let alarmId = try await manager.schedule(
+                        id: UUID(),
+                        configuration: configuration
+                    )
+                    print("✅ Timer scheduled: \(alarmId)")
+                    return true
+                } catch {
+                    print("❌ Timer failed: \(error)")
                     throw error
                 }
             }
@@ -225,12 +316,31 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
 
     // MARK: - Helpers
 
+    /// Build sound configuration
+    /// - Parameter soundName: Name of sound file WITHOUT extension (e.g., "magic" for "magic.wav")
+    ///                        Sound file must be in app's main bundle
+    ///                        Pass nil for default system alarm sound
+    private func buildSound(soundName: String?) -> ActivityKit.AlertConfiguration.AlertSound {
+        if let name = soundName, !name.isEmpty {
+            // Custom sound - file must be in main bundle
+            return ActivityKit.AlertConfiguration.AlertSound.named(name)
+        } else {
+            // Default system sound
+            return ActivityKit.AlertConfiguration.AlertSound.default
+        }
+    }
+
     private func hexToColor(hex: String) -> Color {
         var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexString = hexString.replacingOccurrences(of: "#", with: "")
 
+        // Handle 3-character hex
+        if hexString.count == 3 {
+            hexString = hexString.map { "\($0)\($0)" }.joined()
+        }
+
         guard hexString.count == 6 else {
-            return Color.gray
+            return Color.blue
         }
 
         var rgbValue: UInt64 = 0

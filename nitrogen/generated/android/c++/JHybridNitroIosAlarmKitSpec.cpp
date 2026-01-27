@@ -52,6 +52,11 @@ namespace margelo::nitro::nitroiosalarmkit {
   
 
   // Methods
+  bool JHybridNitroIosAlarmKitSpec::isAvailable() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("isAvailable");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
   std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::requestAlarmPermission() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("requestAlarmPermission");
     auto __result = method(_javaPart);
@@ -68,9 +73,9 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JDouble> /* timestamp */, jni::alias_ref<JAlarmCountdown> /* countdown */)>("scheduleFixedAlarm");
-    auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, timestamp.has_value() ? jni::JDouble::valueOf(timestamp.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr);
+  std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JDouble> /* timestamp */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleFixedAlarm");
+    auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, timestamp.has_value() ? jni::JDouble::valueOf(timestamp.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<bool>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -84,8 +89,8 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* hour */, double /* minute */, jni::alias_ref<jni::JArrayClass<JAlarmWeekday>> /* repeats */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<JAlarmCountdown> /* countdown */)>("scheduleRelativeAlarm");
+  std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* hour */, double /* minute */, jni::alias_ref<jni::JArrayClass<JAlarmWeekday>> /* repeats */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleRelativeAlarm");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), hour, minute, [&]() {
       size_t __size = repeats.size();
       jni::local_ref<jni::JArrayClass<JAlarmWeekday>> __array = jni::JArrayClass<JAlarmWeekday>::newArray(__size);
@@ -94,7 +99,7 @@ namespace margelo::nitro::nitroiosalarmkit {
         __array->setElement(__i, *JAlarmWeekday::fromCpp(__element));
       }
       return __array;
-    }(), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr);
+    }(), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<bool>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -108,10 +113,21 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  bool JHybridNitroIosAlarmKitSpec::isAvailable() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isAvailable");
-    auto __result = method(_javaPart);
-    return static_cast<bool>(__result);
+  std::shared_ptr<Promise<bool>> JHybridNitroIosAlarmKitSpec::scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* durationSeconds */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleTimer");
+    auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), durationSeconds, secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<bool>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JBoolean>(__boxedResult);
+        __promise->resolve(static_cast<bool>(__result->value()));
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
   }
 
 } // namespace margelo::nitro::nitroiosalarmkit

@@ -22,7 +22,8 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         tintColor: String,
         secondaryBtn: CustomizableAlarmButton?,
         timestamp: Double?,
-        countdown: AlarmCountdown?
+        countdown: AlarmCountdown?,
+        soundName: String?
     ): Promise<Boolean> {
         // No-op on Android
         return Promise.resolved(false)
@@ -36,7 +37,20 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         minute: Double,
         repeats: Array<AlarmWeekday>,
         secondaryBtn: CustomizableAlarmButton?,
-        countdown: AlarmCountdown?
+        countdown: AlarmCountdown?,
+        soundName: String?
+    ): Promise<Boolean> {
+        // No-op on Android
+        return Promise.resolved(false)
+    }
+
+    override fun scheduleTimer(
+        title: String,
+        stopBtn: CustomizableAlarmButton,
+        tintColor: String,
+        durationSeconds: Double,
+        secondaryBtn: CustomizableAlarmButton?,
+        soundName: String?
     ): Promise<Boolean> {
         // No-op on Android
         return Promise.resolved(false)

@@ -110,6 +110,18 @@ open class HybridNitroIosAlarmKitSpec_cxx {
 
   // Methods
   @inline(__always)
+  public final func isAvailable() -> bridge.Result_bool_ {
+    do {
+      let __result = try self.__implementation.isAvailable()
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func requestAlarmPermission() -> bridge.Result_std__shared_ptr_Promise_bool___ {
     do {
       let __result = try self.__implementation.requestAlarmPermission()
@@ -129,9 +141,16 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func scheduleFixedAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_) -> bridge.Result_std__shared_ptr_Promise_bool___ {
+  public final func scheduleFixedAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_bool___ {
     do {
-      let __result = try self.__implementation.scheduleFixedAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), secondaryBtn: secondaryBtn.value, timestamp: timestamp.value, countdown: countdown.value)
+      let __result = try self.__implementation.scheduleFixedAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), secondaryBtn: secondaryBtn.value, timestamp: timestamp.value, countdown: countdown.value, soundName: { () -> String? in
+        if bridge.has_value_std__optional_std__string_(soundName) {
+          let __unwrapped = bridge.get_std__optional_std__string_(soundName)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }())
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_bool__ in
         let __promise = bridge.create_std__shared_ptr_Promise_bool__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_bool__(__promise)
@@ -148,13 +167,20 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func scheduleRelativeAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, hour: Double, minute: Double, repeats: bridge.std__vector_AlarmWeekday_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, countdown: bridge.std__optional_AlarmCountdown_) -> bridge.Result_std__shared_ptr_Promise_bool___ {
+  public final func scheduleRelativeAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, hour: Double, minute: Double, repeats: bridge.std__vector_AlarmWeekday_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_bool___ {
     do {
       let __result = try self.__implementation.scheduleRelativeAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), hour: hour, minute: minute, repeats: { () -> [AlarmWeekday] in
         let __data = bridge.get_data_std__vector_AlarmWeekday_(repeats)
         let __size = repeats.size()
         return Array(UnsafeBufferPointer(start: __data, count: __size))
-      }(), secondaryBtn: secondaryBtn.value, countdown: countdown.value)
+      }(), secondaryBtn: secondaryBtn.value, countdown: countdown.value, soundName: { () -> String? in
+        if bridge.has_value_std__optional_std__string_(soundName) {
+          let __unwrapped = bridge.get_std__optional_std__string_(soundName)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }())
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_bool__ in
         let __promise = bridge.create_std__shared_ptr_Promise_bool__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_bool__(__promise)
@@ -171,14 +197,28 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func isAvailable() -> bridge.Result_bool_ {
+  public final func scheduleTimer(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, durationSeconds: Double, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_bool___ {
     do {
-      let __result = try self.__implementation.isAvailable()
-      let __resultCpp = __result
-      return bridge.create_Result_bool_(__resultCpp)
+      let __result = try self.__implementation.scheduleTimer(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), durationSeconds: durationSeconds, secondaryBtn: secondaryBtn.value, soundName: { () -> String? in
+        if bridge.has_value_std__optional_std__string_(soundName) {
+          let __unwrapped = bridge.get_std__optional_std__string_(soundName)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_bool__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_bool__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_bool__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_bool_(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_bool___(__exceptionPtr)
     }
   }
 }

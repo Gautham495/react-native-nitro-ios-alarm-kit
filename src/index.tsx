@@ -33,6 +33,14 @@ export function requestAlarmPermission(): Promise<boolean> {
 
 /**
  * Schedule an alarm at a fixed timestamp
+ *
+ * @param title - Alarm title (keep under 15 chars for Dynamic Island)
+ * @param stopBtn - Stop button configuration
+ * @param tintColor - Hex color for alarm UI (e.g., "#FF6B6B")
+ * @param secondaryBtn - Optional snooze/secondary button
+ * @param timestamp - Unix timestamp in seconds (must be in future)
+ * @param countdown - Optional snooze duration configuration
+ * @param soundName - Custom sound file name without extension (e.g., "magic" for magic.wav)
  */
 export function scheduleFixedAlarm(
   title: string,
@@ -40,7 +48,8 @@ export function scheduleFixedAlarm(
   tintColor: string,
   secondaryBtn?: CustomizableAlarmButton,
   timestamp?: number,
-  countdown?: AlarmCountdown
+  countdown?: AlarmCountdown,
+  soundName?: string
 ): Promise<boolean> {
   return NitroIosAlarmKitHybridObject.scheduleFixedAlarm(
     title,
@@ -48,12 +57,23 @@ export function scheduleFixedAlarm(
     tintColor,
     secondaryBtn,
     timestamp,
-    countdown
+    countdown,
+    soundName
   );
 }
 
 /**
  * Schedule a repeating alarm at a specific time
+ *
+ * @param title - Alarm title (keep under 15 chars for Dynamic Island)
+ * @param stopBtn - Stop button configuration
+ * @param tintColor - Hex color for alarm UI
+ * @param hour - Hour in 24-hour format (0-23)
+ * @param minute - Minute (0-59)
+ * @param repeats - Array of weekdays to repeat on
+ * @param secondaryBtn - Optional snooze button
+ * @param countdown - Optional snooze duration
+ * @param soundName - Custom sound file name without extension
  */
 export function scheduleRelativeAlarm(
   title: string,
@@ -63,7 +83,8 @@ export function scheduleRelativeAlarm(
   minute: number,
   repeats: AlarmWeekday[],
   secondaryBtn?: CustomizableAlarmButton,
-  countdown?: AlarmCountdown
+  countdown?: AlarmCountdown,
+  soundName?: string
 ): Promise<boolean> {
   return NitroIosAlarmKitHybridObject.scheduleRelativeAlarm(
     title,
@@ -73,7 +94,36 @@ export function scheduleRelativeAlarm(
     minute,
     repeats,
     secondaryBtn,
-    countdown
+    countdown,
+    soundName
+  );
+}
+
+/**
+ * Schedule a countdown timer
+ *
+ * @param title - Timer title (keep under 15 chars for Dynamic Island)
+ * @param stopBtn - Stop button configuration
+ * @param tintColor - Hex color for timer UI
+ * @param durationSeconds - Timer duration in seconds
+ * @param secondaryBtn - Optional secondary button
+ * @param soundName - Custom sound file name without extension
+ */
+export function scheduleTimer(
+  title: string,
+  stopBtn: CustomizableAlarmButton,
+  tintColor: string,
+  durationSeconds: number,
+  secondaryBtn?: CustomizableAlarmButton,
+  soundName?: string
+): Promise<boolean> {
+  return NitroIosAlarmKitHybridObject.scheduleTimer(
+    title,
+    stopBtn,
+    tintColor,
+    durationSeconds,
+    secondaryBtn,
+    soundName
   );
 }
 
@@ -82,4 +132,5 @@ export default {
   requestAlarmPermission,
   scheduleFixedAlarm,
   scheduleRelativeAlarm,
+  scheduleTimer,
 };

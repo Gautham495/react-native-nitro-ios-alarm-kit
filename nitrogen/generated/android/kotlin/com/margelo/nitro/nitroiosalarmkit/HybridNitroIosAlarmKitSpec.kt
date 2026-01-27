@@ -42,19 +42,23 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
+  abstract fun isAvailable(): Boolean
+  
+  @DoNotStrip
+  @Keep
   abstract fun requestAlarmPermission(): Promise<Boolean>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?): Promise<Boolean>
+  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<Boolean>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?): Promise<Boolean>
+  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?): Promise<Boolean>
   
   @DoNotStrip
   @Keep
-  abstract fun isAvailable(): Boolean
+  abstract fun scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Boolean>
 
   private external fun initHybrid(): HybridData
 

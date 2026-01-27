@@ -68,6 +68,14 @@ namespace margelo::nitro::nitroiosalarmkit {
 
   public:
     // Methods
+    inline bool isAvailable() override {
+      auto __result = _swiftPart.isAvailable();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<Promise<bool>> requestAlarmPermission() override {
       auto __result = _swiftPart.requestAlarmPermission();
       if (__result.hasError()) [[unlikely]] {
@@ -76,24 +84,24 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<bool>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown) override {
-      auto __result = _swiftPart.scheduleFixedAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, secondaryBtn, timestamp, countdown);
+    inline std::shared_ptr<Promise<bool>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+      auto __result = _swiftPart.scheduleFixedAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, secondaryBtn, timestamp, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<bool>> scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown) override {
-      auto __result = _swiftPart.scheduleRelativeAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(hour)>(hour), std::forward<decltype(minute)>(minute), repeats, secondaryBtn, countdown);
+    inline std::shared_ptr<Promise<bool>> scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+      auto __result = _swiftPart.scheduleRelativeAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(hour)>(hour), std::forward<decltype(minute)>(minute), repeats, secondaryBtn, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline bool isAvailable() override {
-      auto __result = _swiftPart.isAvailable();
+    inline std::shared_ptr<Promise<bool>> scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override {
+      auto __result = _swiftPart.scheduleTimer(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(durationSeconds)>(durationSeconds), secondaryBtn, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

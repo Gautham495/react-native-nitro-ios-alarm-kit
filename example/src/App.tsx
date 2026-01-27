@@ -12,6 +12,7 @@ import {
   requestAlarmPermission,
   scheduleFixedAlarm,
   scheduleRelativeAlarm,
+  scheduleTimer,
 } from 'react-native-nitro-ios-alarm-kit';
 
 export default function App() {
@@ -34,6 +35,37 @@ export default function App() {
     );
   };
 
+  const handleScheduleTimer = async () => {
+    if (!authorized) {
+      Alert.alert('Permission Required', 'Please grant alarm permission first');
+      return;
+    }
+
+    // Schedule a 5 second timer
+    const success = await scheduleTimer(
+      'Done! 🎉', // Keep title SHORT for Dynamic Island
+      {
+        text: 'Stop',
+        textColor: '#FFFFFF',
+        icon: 'checkmark.circle.fill', // Distinctive icon for Dynamic Island
+      },
+      '#FF6B6B', // Tint color
+      5, // 5 seconds
+      {
+        text: 'Snooze',
+        textColor: '#FFFFFF',
+        icon: 'repeat.circle.fill',
+      },
+      'magic' // Custom sound: magic.wav in bundle (optional)
+    );
+
+    if (success) {
+      Alert.alert('Success', 'Timer set for 5 seconds');
+    } else {
+      Alert.alert('Error', 'Failed to schedule timer');
+    }
+  };
+
   const handleScheduleFixedAlarm = async () => {
     if (!authorized) {
       Alert.alert('Permission Required', 'Please grant alarm permission first');
@@ -44,16 +76,21 @@ export default function App() {
     const timestamp = Date.now() / 1000 + 10;
 
     const success = await scheduleFixedAlarm(
-      'Timer Complete! 🎉',
+      'Time Up!', // Keep title SHORT
       {
-        text: 'Stop',
+        text: 'Done',
         textColor: '#FFFFFF',
-        icon: 'stop.fill',
+        icon: 'checkmark.circle.fill',
       },
       '#007AFF',
-      undefined,
+      {
+        text: 'Snooze',
+        textColor: '#FFFFFF',
+        icon: 'repeat.circle.fill',
+      },
       timestamp,
-      { preAlert: 5, postAlert: 10 }
+      { postAlert: 60 }, // 1 min snooze
+      undefined // Use default sound
     );
 
     if (success) {
@@ -70,22 +107,23 @@ export default function App() {
     }
 
     const success = await scheduleRelativeAlarm(
-      'Good Morning! ☀️',
+      'Wake Up!', // Keep title SHORT - no emojis for cleaner look
       {
-        text: 'Wake Up',
+        text: 'Stop',
         textColor: '#FFFFFF',
         icon: 'sun.max.fill',
       },
       '#FF9500',
-      7,
-      0,
+      7, // 7 AM
+      0, // :00
       ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
       {
         text: 'Snooze',
         textColor: '#FFFFFF',
         icon: 'moon.zzz.fill',
       },
-      { preAlert: 60, postAlert: 120 }
+      { postAlert: 540 }, // 9 min snooze (like iOS default)
+      'alarm_morning' // Custom sound (optional)
     );
 
     if (success) {
@@ -123,16 +161,16 @@ export default function App() {
                   authorized === null
                     ? '#8E8E93'
                     : authorized
-                    ? '#34C759'
-                    : '#FF3B30',
+                      ? '#34C759'
+                      : '#FF3B30',
               },
             ]}
           >
             {authorized === null
               ? '⏳ Unknown'
               : authorized
-              ? '✅ Yes'
-              : '❌ No'}
+                ? '✅ Yes'
+                : '❌ No'}
           </Text>
         </View>
       </View>
@@ -148,14 +186,14 @@ export default function App() {
         <Pressable
           style={[
             styles.button,
-            styles.secondaryButton,
+            styles.timerButton,
             !authorized && styles.disabledButton,
           ]}
-          onPress={handleScheduleFixedAlarm}
+          onPress={handleScheduleTimer}
           disabled={!authorized}
         >
           <Text style={[styles.buttonText, !authorized && styles.disabledText]}>
-            Schedule One-Time Alarm (10s)
+            ⏱️ Schedule Timer (5s)
           </Text>
         </Pressable>
 
@@ -165,21 +203,40 @@ export default function App() {
             styles.secondaryButton,
             !authorized && styles.disabledButton,
           ]}
+          onPress={handleScheduleFixedAlarm}
+          disabled={!authorized}
+        >
+          <Text style={[styles.buttonText, !authorized && styles.disabledText]}>
+            🔔 Schedule Alarm (10s)
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[
+            styles.button,
+            styles.tertiaryButton,
+            !authorized && styles.disabledButton,
+          ]}
           onPress={handleScheduleDailyAlarm}
           disabled={!authorized}
         >
           <Text style={[styles.buttonText, !authorized && styles.disabledText]}>
-            Schedule Daily Alarm (7:00 AM)
+            ☀️ Schedule Daily (7:00 AM)
           </Text>
         </Pressable>
       </View>
 
       {!available && (
         <Text style={styles.note}>
-          Note: AlarmKit requires iOS 26+. On Android and older iOS versions,
-          all methods return false.
+          Note: AlarmKit requires iOS 26+ on a physical device. Simulator is not
+          supported.
         </Text>
       )}
+
+      <Text style={styles.tips}>
+        💡 Tips:{'\n'}• Keep titles under 15 chars{'\n'}• Use distinctive SF
+        Symbol icons{'\n'}• Add sound files to app bundle
+      </Text>
     </View>
   );
 }
@@ -241,8 +298,14 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: '#007AFF',
   },
+  timerButton: {
+    backgroundColor: '#FF6B6B',
+  },
   secondaryButton: {
     backgroundColor: '#34C759',
+  },
+  tertiaryButton: {
+    backgroundColor: '#FF9500',
   },
   disabledButton: {
     backgroundColor: '#C7C7CC',
@@ -261,5 +324,13 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     textAlign: 'center',
     paddingHorizontal: 20,
+  },
+  tips: {
+    marginTop: 16,
+    fontSize: 12,
+    color: '#8E8E93',
+    textAlign: 'left',
+    paddingHorizontal: 20,
+    lineHeight: 18,
   },
 });
