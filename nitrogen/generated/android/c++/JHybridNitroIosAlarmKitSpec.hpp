@@ -55,6 +55,8 @@ namespace margelo::nitro::nitroiosalarmkit {
     // Methods
     bool isAvailable() override;
     std::shared_ptr<Promise<bool>> requestAlarmPermission() override;
+    std::shared_ptr<Promise<bool>> stopAllAlarms() override;
+    std::shared_ptr<Promise<bool>> scheduleProgressiveBells(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double baseTimestamp, double intervalSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override;
     std::shared_ptr<Promise<bool>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override;
     std::shared_ptr<Promise<bool>> scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override;
     std::shared_ptr<Promise<bool>> scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override;

@@ -16,6 +16,8 @@ public protocol HybridNitroIosAlarmKitSpec_protocol: HybridObject {
   // Methods
   func isAvailable() throws -> Bool
   func requestAlarmPermission() throws -> Promise<Bool>
+  func stopAllAlarms() throws -> Promise<Bool>
+  func scheduleProgressiveBells(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, baseTimestamp: Double, intervalSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?) throws -> Promise<Bool>
   func scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?) throws -> Promise<Bool>
   func scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: [AlarmWeekday], secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?) throws -> Promise<Bool>
   func scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?) throws -> Promise<Bool>

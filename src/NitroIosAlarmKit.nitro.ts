@@ -37,8 +37,40 @@ export interface NitroIosAlarmKit
   requestAlarmPermission(): Promise<boolean>;
 
   /**
+   * Stop and delete all scheduled alarms
+   * @returns true if successful
+   */
+  stopAllAlarms(): Promise<boolean>;
+
+  /**
+   * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
+   * Useful for meditation bells that ring before and after the main time
+   *
+   * @param title - Keep under 15 chars for Dynamic Island
+   * @param stopBtn - Stop button config
+   * @param tintColor - Hex color (e.g., "#6B4EFF")
+   * @param baseTimestamp - Base Unix timestamp in seconds (the "t" reference point)
+   * @param intervalSeconds - Interval between bells in seconds
+   * @param secondaryBtn - Optional secondary button
+   * @param soundName - Sound file name without extension
+   *
+   * @example
+   * // Bells at: base+60s, base+120s, base+180s, base-60s, base-120s, base-180s
+   * scheduleProgressiveBells("Breathe", stopBtn, "#6B4EFF", timestamp, 60);
+   */
+  scheduleProgressiveBells(
+    title: string,
+    stopBtn: CustomizableAlarmButton,
+    tintColor: string,
+    baseTimestamp: number,
+    intervalSeconds: number,
+    secondaryBtn?: CustomizableAlarmButton,
+    soundName?: string
+  ): Promise<boolean>;
+
+  /**
    * Schedule an alarm at a fixed timestamp
-   * 
+   *
    * @param title - Keep under 15 chars for Dynamic Island
    * @param stopBtn - Stop button config
    * @param tintColor - Hex color (e.g., "#FF6B6B")
@@ -59,7 +91,7 @@ export interface NitroIosAlarmKit
 
   /**
    * Schedule a repeating alarm at a specific time
-   * 
+   *
    * @param title - Keep under 15 chars for Dynamic Island
    * @param stopBtn - Stop button config
    * @param tintColor - Hex color
@@ -84,7 +116,7 @@ export interface NitroIosAlarmKit
 
   /**
    * Schedule a countdown timer
-   * 
+   *
    * @param title - Keep under 15 chars for Dynamic Island
    * @param stopBtn - Stop button config
    * @param tintColor - Hex color

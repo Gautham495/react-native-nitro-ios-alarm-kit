@@ -84,6 +84,22 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<Promise<bool>> stopAllAlarms() override {
+      auto __result = _swiftPart.stopAllAlarms();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<bool>> scheduleProgressiveBells(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double baseTimestamp, double intervalSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override {
+      auto __result = _swiftPart.scheduleProgressiveBells(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(baseTimestamp)>(baseTimestamp), std::forward<decltype(intervalSeconds)>(intervalSeconds), secondaryBtn, soundName);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<Promise<bool>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleFixedAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, secondaryBtn, timestamp, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {

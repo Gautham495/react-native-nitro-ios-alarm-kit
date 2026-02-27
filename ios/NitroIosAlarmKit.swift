@@ -40,6 +40,131 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
         }
     }
 
+    // MARK: - Stop All Alarms
+
+    func stopAllAlarms() throws -> NitroModules.Promise<Bool> {
+        return NitroModules.Promise.async {
+            #if canImport(AlarmKit)
+            if #available(iOS 26.0, *) {
+                let manager = AlarmManager.shared
+                do {
+                    let alarms = await manager.alarms
+                    for alarm in alarms {
+                        try await manager.delete(id: alarm.id)
+                        print("🗑️ Deleted alarm: \(alarm.id)")
+                    }
+                    print("✅ All alarms stopped")
+                    return true
+                } catch {
+                    print("❌ Failed to stop alarms: \(error)")
+                    throw error
+                }
+            }
+            #endif
+            return false
+        }
+    }
+
+    // MARK: - Progressive Bell Pattern
+    // Pattern: t+1, t+2, t+3, t-1, t-2, t-3, loop
+    // Each offset is in seconds from base time
+
+    func scheduleProgressiveBells(
+        title: String,
+        stopBtn: CustomizableAlarmButton,
+        tintColor: String,
+        baseTimestamp: Double,
+        intervalSeconds: Double,
+        secondaryBtn: CustomizableAlarmButton?,
+        soundName: String?
+    ) throws -> NitroModules.Promise<Bool> {
+        return NitroModules.Promise.async {
+            #if canImport(AlarmKit)
+            if #available(iOS 26.0, *) {
+                let manager = AlarmManager.shared
+
+                // Progressive pattern: +1, +2, +3, -1, -2, -3 (relative to interval)
+                let offsets: [Double] = [1, 2, 3, -1, -2, -3]
+
+                let stopButton = AlarmButton(
+                    text: LocalizedStringResource(stringLiteral: stopBtn.text),
+                    textColor: self.hexToColor(hex: stopBtn.textColor),
+                    systemImageName: stopBtn.icon ?? "checkmark.circle.fill"
+                )
+
+                let alert: AlarmPresentation.Alert
+
+                if let btn = secondaryBtn {
+                    let secondaryButton = AlarmButton(
+                        text: LocalizedStringResource(stringLiteral: btn.text),
+                        textColor: self.hexToColor(hex: btn.textColor),
+                        systemImageName: btn.icon ?? "repeat.circle.fill"
+                    )
+
+                    alert = AlarmPresentation.Alert(
+                        title: LocalizedStringResource(stringLiteral: title),
+                        stopButton: stopButton,
+                        secondaryButton: secondaryButton,
+                        secondaryButtonBehavior: .countdown
+                    )
+                } else {
+                    alert = AlarmPresentation.Alert(
+                        title: LocalizedStringResource(stringLiteral: title),
+                        stopButton: stopButton
+                    )
+                }
+
+                let presentation = AlarmPresentation(alert: alert)
+
+                let attributes = AlarmAttributes<AlarmMetadataInfo>(
+                    presentation: presentation,
+                    tintColor: self.hexToColor(hex: tintColor)
+                )
+
+                let sound = self.buildSound(soundName: soundName)
+
+                var scheduledCount = 0
+
+                for (index, offset) in offsets.enumerated() {
+                    // Calculate bell time: base + (offset * interval)
+                    let bellTimestamp = baseTimestamp + (offset * intervalSeconds)
+                    let bellDate = Date(timeIntervalSince1970: bellTimestamp)
+
+                    // Skip if in the past
+                    guard bellDate > Date() else {
+                        print("⏭️ Skipping past bell at offset \(offset)")
+                        continue
+                    }
+
+                    let schedule = Alarm.Schedule.fixed(bellDate)
+
+                    let configuration = AlarmManager.AlarmConfiguration(
+                        countdownDuration: nil,
+                        schedule: schedule,
+                        attributes: attributes,
+                        sound: sound
+                    )
+
+                    do {
+                        let alarmId = try await manager.schedule(
+                            id: UUID(),
+                            configuration: configuration
+                        )
+                        print("🔔 Bell \(index + 1) scheduled at offset \(offset): \(alarmId)")
+                        scheduledCount += 1
+                    } catch {
+                        print("❌ Bell \(index + 1) failed: \(error)")
+                    }
+                }
+
+                print("✅ Progressive bells scheduled: \(scheduledCount)/\(offsets.count)")
+                return scheduledCount > 0
+            }
+            #endif
+            return false
+        }
+    }
+
     // MARK: - Fixed Alarm
 
     func scheduleFixedAlarm(

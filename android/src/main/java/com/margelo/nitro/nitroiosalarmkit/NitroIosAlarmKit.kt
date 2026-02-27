@@ -16,6 +16,24 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         return Promise.resolved(false)
     }
 
+    override fun stopAllAlarms(): Promise<Boolean> {
+        // No-op on Android
+        return Promise.resolved(false)
+    }
+
+    override fun scheduleProgressiveBells(
+        title: String,
+        stopBtn: CustomizableAlarmButton,
+        tintColor: String,
+        baseTimestamp: Double,
+        intervalSeconds: Double,
+        secondaryBtn: CustomizableAlarmButton?,
+        soundName: String?
+    ): Promise<Boolean> {
+        // No-op on Android
+        return Promise.resolved(false)
+    }
+
     override fun scheduleFixedAlarm(
         title: String,
         stopBtn: CustomizableAlarmButton,
