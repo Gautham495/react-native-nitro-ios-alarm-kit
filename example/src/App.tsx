@@ -186,7 +186,8 @@ export default function App() {
       return;
     }
 
-    const lastAlarmId = scheduledAlarms[scheduledAlarms.length - 1];
+    const lastAlarmId = scheduledAlarms[scheduledAlarms.length - 1] || '';
+    
     const success = await stopAlarm(lastAlarmId);
 
     if (success) {

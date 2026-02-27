@@ -40,77 +40,77 @@ class NitroIosAlarmKit: HybridNitroIosAlarmKitSpec {
         }
     }
 
-    // MARK: - Stop All Alarms
+// MARK: - Stop All Alarms
 
-    func stopAllAlarms() throws -> NitroModules.Promise<Bool> {
-        return NitroModules.Promise.async {
-            #if canImport(AlarmKit)
-            if #available(iOS 26.0, *) {
-                let manager = AlarmManager.shared
-                let alarms = await manager.alarms
-                var successCount = 0
+func stopAllAlarms() throws -> NitroModules.Promise<Bool> {
+    return NitroModules.Promise.async {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            let manager = AlarmManager.shared
+            let alarms = await manager.alarms
+            var successCount = 0
 
-                for alarm in alarms {
-                    do {
-                        // Stop if firing, cancel if scheduled
-                        if alarm.state == .alert {
-                            try await manager.stop(id: alarm.id)
-                            print("⏹️ Stopped firing alarm: \(alarm.id)")
-                        } else {
-                            try await manager.cancel(id: alarm.id)
-                            print("🗑️ Cancelled alarm: \(alarm.id)")
-                        }
-                        successCount += 1
-                    } catch {
-                        print("⚠️ Failed to handle alarm \(alarm.id): \(error)")
-                    }
-                }
-
-                print("✅ Handled \(successCount)/\(alarms.count) alarms")
-                return successCount > 0 || alarms.isEmpty
-            }
-            #endif
-            return false
-        }
-    }
-
-    // MARK: - Stop Single Alarm by ID
-
-    func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
-        return NitroModules.Promise.async {
-            #if canImport(AlarmKit)
-            if #available(iOS 26.0, *) {
-                let manager = AlarmManager.shared
-
-                guard let uuid = UUID(uuidString: alarmId) else {
-                    print("❌ Invalid alarm ID format: \(alarmId)")
-                    return false
-                }
-
-                // Find the alarm to check its state
-                let alarms = await manager.alarms
-                let targetAlarm = alarms.first { $0.id == uuid }
-
+            for alarm in alarms {
                 do {
-                    if let alarm = targetAlarm, alarm.state == .alert {
-                        // Alarm is currently firing - stop it
-                        try await manager.stop(id: uuid)
-                        print("⏹️ Stopped firing alarm: \(uuid)")
+                    // Stop if firing, cancel if scheduled
+                    if case .alert = alarm.state {
+                        try await manager.stop(id: alarm.id)
+                        print("⏹️ Stopped firing alarm: \(alarm.id)")
                     } else {
-                        // Alarm is scheduled - cancel it
-                        try await manager.cancel(id: uuid)
-                        print("🗑️ Cancelled alarm: \(uuid)")
+                        try await manager.cancel(id: alarm.id)
+                        print("🗑️ Cancelled alarm: \(alarm.id)")
                     }
-                    return true
+                    successCount += 1
                 } catch {
-                    print("❌ Failed to stop alarm \(alarmId): \(error)")
-                    throw error
+                    print("⚠️ Failed to handle alarm \(alarm.id): \(error)")
                 }
             }
-            #endif
-            return false
+
+            print("✅ Handled \(successCount)/\(alarms.count) alarms")
+            return successCount > 0 || alarms.isEmpty
         }
+        #endif
+        return false
     }
+}
+
+// MARK: - Stop Single Alarm by ID
+
+func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
+    return NitroModules.Promise.async {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            let manager = AlarmManager.shared
+
+            guard let uuid = UUID(uuidString: alarmId) else {
+                print("❌ Invalid alarm ID format: \(alarmId)")
+                return false
+            }
+
+            // Find the alarm to check its state
+            let alarms = await manager.alarms
+            let targetAlarm = alarms.first { $0.id == uuid }
+
+            do {
+                if let alarm = targetAlarm, case .alert = alarm.state {
+                    // Alarm is currently firing - stop it
+                    try await manager.stop(id: uuid)
+                    print("⏹️ Stopped firing alarm: \(uuid)")
+                } else {
+                    // Alarm is scheduled - cancel it
+                    try await manager.cancel(id: uuid)
+                    print("🗑️ Cancelled alarm: \(uuid)")
+                }
+                return true
+            } catch {
+                print("❌ Failed to stop alarm \(alarmId): \(error)")
+                throw error
+            }
+        }
+        #endif
+        return false
+    }
+}
 
     // MARK: - Fixed Alarm (returns alarm ID)
 
