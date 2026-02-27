@@ -53,7 +53,7 @@ func stopAllAlarms() throws -> NitroModules.Promise<Bool> {
             for alarm in alarms {
                 do {
                     // Stop if firing, cancel if scheduled
-                    if case .alert = alarm.state {
+                    if case .alerting = alarm.state {
                         try await manager.stop(id: alarm.id)
                         print("⏹️ Stopped firing alarm: \(alarm.id)")
                     } else {
@@ -92,7 +92,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
             let targetAlarm = alarms.first { $0.id == uuid }
 
             do {
-                if let alarm = targetAlarm, case .alert = alarm.state {
+                if let alarm = targetAlarm, case .alerting = alarm.state {
                     // Alarm is currently firing - stop it
                     try await manager.stop(id: uuid)
                     print("⏹️ Stopped firing alarm: \(uuid)")
