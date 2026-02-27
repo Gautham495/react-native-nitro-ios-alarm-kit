@@ -32,7 +32,7 @@ export function requestAlarmPermission(): Promise<boolean> {
 }
 
 /**
- * Stop and delete all scheduled alarms
+ * Stop and cancel all scheduled/firing alarms
  * @returns true if successful
  */
 export function stopAllAlarms(): Promise<boolean> {
@@ -40,46 +40,12 @@ export function stopAllAlarms(): Promise<boolean> {
 }
 
 /**
- * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
- * Useful for meditation bells that ring before and after the main time
- *
- * @param title - Bell title (keep under 15 chars for Dynamic Island)
- * @param stopBtn - Stop button configuration
- * @param tintColor - Hex color for alarm UI (e.g., "#FF6B6B")
- * @param baseTimestamp - Base Unix timestamp in seconds (the "t" reference point)
- * @param intervalSeconds - Interval between bells in seconds
- * @param secondaryBtn - Optional secondary button
- * @param soundName - Custom sound file name without extension
- *
- * @example
- * // Schedule bells around a 10-minute meditation at 8:00 AM
- * // With 60-second intervals: bells at 8:01, 8:02, 8:03, 7:59, 7:58, 7:57
- * scheduleProgressiveBells(
- *   "Meditation",
- *   { text: "Done", textColor: "#FFFFFF" },
- *   "#6B4EFF",
- *   Date.now() / 1000 + 600, // 10 mins from now
- *   60 // 1 minute interval
- * );
+ * Stop or cancel a specific alarm by ID
+ * @param alarmId - UUID string of the alarm to stop
+ * @returns true if successful
  */
-export function scheduleProgressiveBells(
-  title: string,
-  stopBtn: CustomizableAlarmButton,
-  tintColor: string,
-  baseTimestamp: number,
-  intervalSeconds: number,
-  secondaryBtn?: CustomizableAlarmButton,
-  soundName?: string
-): Promise<boolean> {
-  return NitroIosAlarmKitHybridObject.scheduleProgressiveBells(
-    title,
-    stopBtn,
-    tintColor,
-    baseTimestamp,
-    intervalSeconds,
-    secondaryBtn,
-    soundName
-  );
+export function stopAlarm(alarmId: string): Promise<boolean> {
+  return NitroIosAlarmKitHybridObject.stopAlarm(alarmId);
 }
 
 /**
@@ -92,6 +58,7 @@ export function scheduleProgressiveBells(
  * @param timestamp - Unix timestamp in seconds (must be in future)
  * @param countdown - Optional snooze duration configuration
  * @param soundName - Custom sound file name without extension (e.g., "magic" for magic.wav)
+ * @returns Alarm ID (UUID string) or null if failed/unavailable
  */
 export function scheduleFixedAlarm(
   title: string,
@@ -101,7 +68,7 @@ export function scheduleFixedAlarm(
   timestamp?: number,
   countdown?: AlarmCountdown,
   soundName?: string
-): Promise<boolean> {
+): Promise<string | null> {
   return NitroIosAlarmKitHybridObject.scheduleFixedAlarm(
     title,
     stopBtn,
@@ -125,6 +92,7 @@ export function scheduleFixedAlarm(
  * @param secondaryBtn - Optional snooze button
  * @param countdown - Optional snooze duration
  * @param soundName - Custom sound file name without extension
+ * @returns Alarm ID (UUID string) or null if failed/unavailable
  */
 export function scheduleRelativeAlarm(
   title: string,
@@ -136,7 +104,7 @@ export function scheduleRelativeAlarm(
   secondaryBtn?: CustomizableAlarmButton,
   countdown?: AlarmCountdown,
   soundName?: string
-): Promise<boolean> {
+): Promise<string | null> {
   return NitroIosAlarmKitHybridObject.scheduleRelativeAlarm(
     title,
     stopBtn,
@@ -159,6 +127,7 @@ export function scheduleRelativeAlarm(
  * @param durationSeconds - Timer duration in seconds
  * @param secondaryBtn - Optional secondary button
  * @param soundName - Custom sound file name without extension
+ * @returns Alarm ID (UUID string) or null if failed/unavailable
  */
 export function scheduleTimer(
   title: string,
@@ -167,7 +136,7 @@ export function scheduleTimer(
   durationSeconds: number,
   secondaryBtn?: CustomizableAlarmButton,
   soundName?: string
-): Promise<boolean> {
+): Promise<string | null> {
   return NitroIosAlarmKitHybridObject.scheduleTimer(
     title,
     stopBtn,
@@ -178,12 +147,46 @@ export function scheduleTimer(
   );
 }
 
+/**
+ * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
+ * Useful for meditation bells that ring before and after the main time
+ *
+ * @param title - Bell title (keep under 15 chars for Dynamic Island)
+ * @param stopBtn - Stop button configuration
+ * @param tintColor - Hex color for alarm UI (e.g., "#FF6B6B")
+ * @param baseTimestamp - Base Unix timestamp in seconds (the "t" reference point)
+ * @param intervalSeconds - Interval between bells in seconds
+ * @param secondaryBtn - Optional secondary button
+ * @param soundName - Custom sound file name without extension
+ * @returns Array of scheduled alarm IDs (UUID strings)
+ */
+export function scheduleProgressiveBells(
+  title: string,
+  stopBtn: CustomizableAlarmButton,
+  tintColor: string,
+  baseTimestamp: number,
+  intervalSeconds: number,
+  secondaryBtn?: CustomizableAlarmButton,
+  soundName?: string
+): Promise<string[]> {
+  return NitroIosAlarmKitHybridObject.scheduleProgressiveBells(
+    title,
+    stopBtn,
+    tintColor,
+    baseTimestamp,
+    intervalSeconds,
+    secondaryBtn,
+    soundName
+  );
+}
+
 export default {
   isAvailable,
   requestAlarmPermission,
   stopAllAlarms,
-  scheduleProgressiveBells,
+  stopAlarm,
   scheduleFixedAlarm,
   scheduleRelativeAlarm,
   scheduleTimer,
+  scheduleProgressiveBells,
 };

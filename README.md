@@ -10,28 +10,28 @@ A **React Native Nitro Module** providing native iOS AlarmKit bindings for **sch
 
 - 🔵 **Apple AlarmKit API** (iOS 26+)
 - ⏰ **Fixed, Repeating & Timer Alarms**
+- 🧘 **Progressive Bells** for meditation apps
 - 🎨 **Customizable Alarm UI**
 - 🔊 **Custom Alarm Sounds**
+- 🛑 **Stop Individual or All Alarms**
 
 ---
 
 > [!IMPORTANT]
 >
 > - Works in both Expo & Bare (Non Expo) React Native projects.
-> - iOS 26+ only — Android returns no-op (false) for all methods.
+> - iOS 26+ only — Android returns no-op (`null`/`false`/`[]`) for all methods.
 > - **Requires physical device** — Simulator has limited support.
 > - AlarmKit was introduced in iOS 26 (WWDC 2025).
 
 ---
 
 ## 📦 Installation
-
 ```bash
 npm install react-native-nitro-ios-alarm-kit react-native-nitro-modules
 ```
 
 Then run:
-
 ```bash
 cd ios && pod install
 ```
@@ -62,7 +62,6 @@ cd ios && pod install
 ### iOS
 
 Add the AlarmKit usage description to your `Info.plist`:
-
 ```xml
 <key>NSAlarmKitUsageDescription</key>
 <string>Your app wants to schedule alerts for alarms you create.</string>
@@ -78,20 +77,22 @@ To use custom alarm sounds:
 
 ### Android
 
-No configuration needed — all methods return `false` as AlarmKit is iOS-only.
+No configuration needed — all methods return `false`/`null`/`[]` as AlarmKit is iOS-only.
 
 ---
 
 ## 🧠 Overview
 
-| Feature             | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| **Fixed Alarms**    | Schedule one-time alarms at a specific timestamp             |
-| **Relative Alarms** | Schedule repeating alarms (daily, weekly) at a specific time |
-| **Timers**          | Schedule countdown timers that fire after a duration         |
-| **Custom UI**       | Customize button text, colors, and SF Symbols icons          |
-| **Custom Sounds**   | Use your own alarm sounds from the app bundle                |
-| **Countdown**       | Configure pre-alert and post-alert (snooze) durations        |
+| Feature                 | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| **Fixed Alarms**        | Schedule one-time alarms at a specific timestamp               |
+| **Relative Alarms**     | Schedule repeating alarms (daily, weekly) at a specific time   |
+| **Timers**              | Schedule countdown timers that fire after a duration           |
+| **Progressive Bells**   | Schedule meditation bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3 |
+| **Stop Alarm**          | Cancel a specific alarm by ID                                  |
+| **Stop All Alarms**     | Cancel all scheduled/firing alarms                             |
+| **Custom UI**           | Customize button text, colors, and SF Symbols icons            |
+| **Custom Sounds**       | Use your own alarm sounds from the app bundle                  |
 
 ---
 
@@ -99,34 +100,34 @@ No configuration needed — all methods return `false` as AlarmKit is iOS-only.
 
 The Dynamic Island has very limited space. Follow these tips for best results:
 
-| Tip | Why |
-|-----|-----|
-| **Keep titles under 15 characters** | Longer titles get truncated |
-| **Use distinctive SF Symbol icons** | Only the icon shows in Dynamic Island, not button text |
-| **Set short app display name** | Your `CFBundleDisplayName` shows in the alarm UI |
+| Tip                               | Why                                          |
+| --------------------------------- | -------------------------------------------- |
+| **Keep titles under 15 characters** | Longer titles get truncated                  |
+| **Use distinctive SF Symbol icons** | Only the icon shows in Dynamic Island        |
+| **Set short app display name**    | Your `CFBundleDisplayName` shows in alarm UI |
 
 **Good icons for Dynamic Island:**
+
 - Stop: `checkmark.circle.fill`, `stop.circle.fill`, `xmark.circle.fill`
 - Snooze: `repeat.circle.fill`, `clock.arrow.circlepath`, `zzz`
+- Meditation: `leaf.fill`, `sparkles`, `wind`
 
 ---
 
 ## ⚙️ Usage
 
 ### Check Availability
-
 ```tsx
 import { isAvailable } from 'react-native-nitro-ios-alarm-kit';
 
 if (isAvailable()) {
   // AlarmKit is available (iOS 26+)
 } else {
-  // Fallback to local notifications or other alarm solution
+  // Fallback to local notifications
 }
 ```
 
 ### Request Permission
-
 ```tsx
 import { requestAlarmPermission } from 'react-native-nitro-ios-alarm-kit';
 
@@ -140,17 +141,16 @@ if (authorized) {
 ```
 
 ### Schedule a Timer (Countdown)
-
 ```tsx
 import { scheduleTimer } from 'react-native-nitro-ios-alarm-kit';
 
 // Schedule a 5-minute timer
-const success = await scheduleTimer(
+const alarmId = await scheduleTimer(
   'Done! 🎉',           // title (keep SHORT!)
   {
     text: 'Stop',
     textColor: '#FFFFFF',
-    icon: 'checkmark.circle.fill',  // Shows in Dynamic Island
+    icon: 'checkmark.circle.fill',
   },
   '#FF6B6B',            // tintColor
   300,                  // 5 minutes in seconds
@@ -161,17 +161,20 @@ const success = await scheduleTimer(
   },
   'magic'               // Custom sound: magic.wav (optional)
 );
+
+if (alarmId) {
+  console.log('Timer scheduled with ID:', alarmId);
+}
 ```
 
 ### Schedule a Fixed Alarm (One-Time)
-
 ```tsx
 import { scheduleFixedAlarm } from 'react-native-nitro-ios-alarm-kit';
 
 // Schedule alarm for 1 hour from now
 const timestamp = Date.now() / 1000 + 3600;
 
-const success = await scheduleFixedAlarm(
+const alarmId = await scheduleFixedAlarm(
   'Wake Up!',           // title (keep SHORT!)
   {
     text: 'Stop',
@@ -188,15 +191,18 @@ const success = await scheduleFixedAlarm(
   { postAlert: 540 },   // 9-min snooze (like iOS default)
   'alarm_sound'         // Custom sound (optional)
 );
+
+if (alarmId) {
+  console.log('Alarm scheduled with ID:', alarmId);
+}
 ```
 
 ### Schedule a Relative Alarm (Repeating)
-
 ```tsx
 import { scheduleRelativeAlarm } from 'react-native-nitro-ios-alarm-kit';
 
 // Schedule alarm for 7:00 AM on weekdays
-const success = await scheduleRelativeAlarm(
+const alarmId = await scheduleRelativeAlarm(
   'Wake Up!',           // title (keep SHORT!)
   {
     text: 'Stop',
@@ -215,168 +221,61 @@ const success = await scheduleRelativeAlarm(
   { postAlert: 540 },   // 9-min snooze
   'morning_alarm'       // Custom sound (optional)
 );
+
+if (alarmId) {
+  console.log('Daily alarm scheduled with ID:', alarmId);
+}
 ```
 
-### Full Example
+### Schedule Progressive Bells (Meditation)
 
+Perfect for meditation apps! Schedules bells in pattern: **t+1, t+2, t+3, t-1, t-2, t-3** where t is the base time and the number is multiplied by the interval.
 ```tsx
-import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
-import {
-  isAvailable,
-  requestAlarmPermission,
-  scheduleTimer,
-  scheduleFixedAlarm,
-  scheduleRelativeAlarm,
-} from 'react-native-nitro-ios-alarm-kit';
+import { scheduleProgressiveBells } from 'react-native-nitro-ios-alarm-kit';
 
-export default function App() {
-  const [authorized, setAuthorized] = useState<boolean | null>(null);
+// Schedule bells around a meditation session ending in 10 minutes
+// With 30-second intervals: bells at t+30s, t+60s, t+90s, t-30s, t-60s, t-90s
+const baseTimestamp = Date.now() / 1000 + 600; // 10 mins from now
 
-  const handleRequestPermission = async () => {
-    if (!isAvailable()) {
-      Alert.alert('Not Available', 'AlarmKit requires iOS 26+');
-      return;
-    }
+const bellIds = await scheduleProgressiveBells(
+  'Breathe',            // title (keep SHORT!)
+  {
+    text: 'OK',
+    textColor: '#FFFFFF',
+    icon: 'leaf.fill',
+  },
+  '#4ECDC4',            // tintColor
+  baseTimestamp,        // Base time (the "t" reference point)
+  30,                   // 30-second intervals
+  undefined,            // No secondary button
+  'singing_bowl'        // Custom sound (optional)
+);
 
-    const result = await requestAlarmPermission();
-    setAuthorized(result);
-  };
+console.log(`Scheduled ${bellIds.length} bells:`, bellIds);
+```
 
-  const handleScheduleTimer = async () => {
-    if (!authorized) {
-      Alert.alert('Permission Required', 'Please grant alarm permission first');
-      return;
-    }
+### Stop a Specific Alarm
+```tsx
+import { stopAlarm } from 'react-native-nitro-ios-alarm-kit';
 
-    const success = await scheduleTimer(
-      'Done! 🎉',
-      { text: 'Stop', textColor: '#FFFFFF', icon: 'checkmark.circle.fill' },
-      '#FF6B6B',
-      10, // 10 seconds
-      { text: 'Snooze', textColor: '#FFFFFF', icon: 'repeat.circle.fill' },
-      'magic' // Optional: custom sound
-    );
+// Stop/cancel a specific alarm by ID
+const success = await stopAlarm(alarmId);
 
-    if (success) {
-      Alert.alert('Success', 'Timer set for 10 seconds');
-    } else {
-      Alert.alert('Error', 'Failed to schedule timer');
-    }
-  };
-
-  const handleScheduleAlarm = async () => {
-    if (!authorized) {
-      Alert.alert('Permission Required', 'Please grant alarm permission first');
-      return;
-    }
-
-    const timestamp = Date.now() / 1000 + 60; // 1 minute from now
-
-    const success = await scheduleFixedAlarm(
-      'Time Up!',
-      { text: 'Done', textColor: '#FFFFFF', icon: 'checkmark.circle.fill' },
-      '#007AFF',
-      { text: 'Snooze', textColor: '#FFFFFF', icon: 'repeat.circle.fill' },
-      timestamp,
-      { postAlert: 300 } // 5-min snooze
-    );
-
-    if (success) {
-      Alert.alert('Success', 'Alarm scheduled for 1 minute from now');
-    }
-  };
-
-  const handleScheduleDaily = async () => {
-    if (!authorized) {
-      Alert.alert('Permission Required', 'Please grant alarm permission first');
-      return;
-    }
-
-    const success = await scheduleRelativeAlarm(
-      'Wake Up!',
-      { text: 'Stop', textColor: '#FFFFFF', icon: 'sun.max.fill' },
-      '#FF9500',
-      7, 0, // 7:00 AM
-      ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-      { text: 'Snooze', textColor: '#FFFFFF', icon: 'moon.zzz.fill' },
-      { postAlert: 540 } // 9-min snooze
-    );
-
-    if (success) {
-      Alert.alert('Success', 'Daily alarm scheduled for 7:00 AM on weekdays');
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>iOS AlarmKit Demo</Text>
-
-      <Text style={styles.status}>
-        Available: {isAvailable() ? '✅ Yes' : '❌ No'}
-      </Text>
-      <Text style={styles.status}>
-        Authorized:{' '}
-        {authorized === null ? '⏳ Unknown' : authorized ? '✅ Yes' : '❌ No'}
-      </Text>
-
-      <Pressable style={styles.button} onPress={handleRequestPermission}>
-        <Text style={styles.buttonText}>Request Permission</Text>
-      </Pressable>
-
-      <Pressable style={[styles.button, styles.timerButton]} onPress={handleScheduleTimer}>
-        <Text style={styles.buttonText}>⏱️ Schedule Timer (10s)</Text>
-      </Pressable>
-
-      <Pressable style={styles.button} onPress={handleScheduleAlarm}>
-        <Text style={styles.buttonText}>🔔 Schedule Alarm (1 min)</Text>
-      </Pressable>
-
-      <Pressable style={[styles.button, styles.dailyButton]} onPress={handleScheduleDaily}>
-        <Text style={styles.buttonText}>☀️ Schedule Daily (7:00 AM)</Text>
-      </Pressable>
-    </View>
-  );
+if (success) {
+  console.log('Alarm stopped');
 }
+```
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f4f6f8',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 20,
-  },
-  status: {
-    fontSize: 16,
-    color: '#666',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    width: '100%',
-  },
-  timerButton: {
-    backgroundColor: '#FF6B6B',
-  },
-  dailyButton: {
-    backgroundColor: '#FF9500',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});
+### Stop All Alarms
+```tsx
+import { stopAllAlarms } from 'react-native-nitro-ios-alarm-kit';
+
+// Stop/cancel all scheduled and firing alarms
+const success = await stopAllAlarms();
+
+if (success) {
+  console.log('All alarms stopped');
+}
 ```
 
 ---
@@ -387,57 +286,121 @@ const styles = StyleSheet.create({
 
 Returns `true` if AlarmKit is available (iOS 26+), `false` otherwise.
 
+---
+
 ### `requestAlarmPermission(): Promise<boolean>`
 
-Requests permission to schedule alarms. Returns `true` if authorized, `false` otherwise.
+Requests permission to schedule alarms.
 
-### `scheduleTimer(title, stopBtn, tintColor, durationSeconds, secondaryBtn?, soundName?): Promise<boolean>`
+**Returns:** `true` if authorized, `false` otherwise.
+
+---
+
+### `stopAlarm(alarmId): Promise<boolean>`
+
+Stops or cancels a specific alarm by ID.
+
+| Parameter | Type     | Required | Description                    |
+| --------- | -------- | -------- | ------------------------------ |
+| `alarmId` | `string` | ✅       | UUID string of alarm to stop   |
+
+**Returns:** `true` if successful, `false` otherwise.
+
+---
+
+### `stopAllAlarms(): Promise<boolean>`
+
+Stops all scheduled and currently firing alarms.
+
+**Returns:** `true` if successful, `false` otherwise.
+
+---
+
+### `scheduleTimer(...): Promise<string | null>`
 
 Schedules a countdown timer that fires after the specified duration.
 
-| Parameter         | Type                      | Required | Description                                    |
-| ----------------- | ------------------------- | -------- | ---------------------------------------------- |
-| `title`           | `string`                  | ✅       | Timer title (keep under 15 chars)              |
-| `stopBtn`         | `CustomizableAlarmButton` | ✅       | Primary stop button configuration              |
-| `tintColor`       | `string`                  | ✅       | Hex color for timer UI (e.g., `#FF6B6B`)       |
-| `durationSeconds` | `number`                  | ✅       | Timer duration in seconds                      |
-| `secondaryBtn`    | `CustomizableAlarmButton` | ❌       | Optional secondary button                      |
-| `soundName`       | `string`                  | ❌       | Sound file name without extension              |
+| Parameter         | Type                      | Required | Description                         |
+| ----------------- | ------------------------- | -------- | ----------------------------------- |
+| `title`           | `string`                  | ✅       | Timer title (keep under 15 chars)   |
+| `stopBtn`         | `CustomizableAlarmButton` | ✅       | Primary stop button configuration   |
+| `tintColor`       | `string`                  | ✅       | Hex color (e.g., `#FF6B6B`)         |
+| `durationSeconds` | `number`                  | ✅       | Timer duration in seconds           |
+| `secondaryBtn`    | `CustomizableAlarmButton` | ❌       | Optional secondary button           |
+| `soundName`       | `string`                  | ❌       | Sound file name without extension   |
 
-### `scheduleFixedAlarm(title, stopBtn, tintColor, secondaryBtn?, timestamp?, countdown?, soundName?): Promise<boolean>`
+**Returns:** Alarm ID (UUID string) or `null` if failed.
+
+---
+
+### `scheduleFixedAlarm(...): Promise<string | null>`
 
 Schedules a one-time alarm at a specific Unix timestamp.
 
-| Parameter      | Type                      | Required | Description                              |
-| -------------- | ------------------------- | -------- | ---------------------------------------- |
-| `title`        | `string`                  | ✅       | Alarm title (keep under 15 chars)        |
-| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration        |
-| `tintColor`    | `string`                  | ✅       | Hex color for alarm UI (e.g., `#FF5733`) |
-| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button (e.g., Snooze) |
-| `timestamp`    | `number`                  | ❌       | Unix timestamp in seconds                |
-| `countdown`    | `AlarmCountdown`          | ❌       | Snooze duration configuration            |
-| `soundName`    | `string`                  | ❌       | Sound file name without extension        |
+| Parameter      | Type                      | Required | Description                          |
+| -------------- | ------------------------- | -------- | ------------------------------------ |
+| `title`        | `string`                  | ✅       | Alarm title (keep under 15 chars)    |
+| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration    |
+| `tintColor`    | `string`                  | ✅       | Hex color (e.g., `#FF5733`)          |
+| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button (Snooze)   |
+| `timestamp`    | `number`                  | ❌       | Unix timestamp in seconds            |
+| `countdown`    | `AlarmCountdown`          | ❌       | Snooze duration configuration        |
+| `soundName`    | `string`                  | ❌       | Sound file name without extension    |
 
-### `scheduleRelativeAlarm(title, stopBtn, tintColor, hour, minute, repeats, secondaryBtn?, countdown?, soundName?): Promise<boolean>`
+**Returns:** Alarm ID (UUID string) or `null` if failed.
+
+---
+
+### `scheduleRelativeAlarm(...): Promise<string | null>`
 
 Schedules a repeating alarm at a specific time on given weekdays.
 
-| Parameter      | Type                      | Required | Description                       |
-| -------------- | ------------------------- | -------- | --------------------------------- |
-| `title`        | `string`                  | ✅       | Alarm title (keep under 15 chars) |
-| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration |
-| `tintColor`    | `string`                  | ✅       | Hex color for alarm UI            |
-| `hour`         | `number`                  | ✅       | Hour (0-23)                       |
-| `minute`       | `number`                  | ✅       | Minute (0-59)                     |
-| `repeats`      | `AlarmWeekday[]`          | ✅       | Days to repeat                    |
-| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button         |
-| `countdown`    | `AlarmCountdown`          | ❌       | Snooze duration configuration     |
-| `soundName`    | `string`                  | ❌       | Sound file name without extension |
+| Parameter      | Type                      | Required | Description                        |
+| -------------- | ------------------------- | -------- | ---------------------------------- |
+| `title`        | `string`                  | ✅       | Alarm title (keep under 15 chars)  |
+| `stopBtn`      | `CustomizableAlarmButton` | ✅       | Primary stop button configuration  |
+| `tintColor`    | `string`                  | ✅       | Hex color                          |
+| `hour`         | `number`                  | ✅       | Hour (0-23)                        |
+| `minute`       | `number`                  | ✅       | Minute (0-59)                      |
+| `repeats`      | `AlarmWeekday[]`          | ✅       | Days to repeat                     |
+| `secondaryBtn` | `CustomizableAlarmButton` | ❌       | Optional secondary button          |
+| `countdown`    | `AlarmCountdown`          | ❌       | Snooze duration configuration      |
+| `soundName`    | `string`                  | ❌       | Sound file name without extension  |
+
+**Returns:** Alarm ID (UUID string) or `null` if failed.
+
+---
+
+### `scheduleProgressiveBells(...): Promise<string[]>`
+
+Schedules meditation bells with progressive pattern: **t+1, t+2, t+3, t-1, t-2, t-3**.
+
+| Parameter         | Type                      | Required | Description                                 |
+| ----------------- | ------------------------- | -------- | ------------------------------------------- |
+| `title`           | `string`                  | ✅       | Bell title (keep under 15 chars)            |
+| `stopBtn`         | `CustomizableAlarmButton` | ✅       | Stop button configuration                   |
+| `tintColor`       | `string`                  | ✅       | Hex color (e.g., `#4ECDC4`)                 |
+| `baseTimestamp`   | `number`                  | ✅       | Base Unix timestamp (the "t" reference)     |
+| `intervalSeconds` | `number`                  | ✅       | Interval between bells in seconds           |
+| `secondaryBtn`    | `CustomizableAlarmButton` | ❌       | Optional secondary button                   |
+| `soundName`       | `string`                  | ❌       | Sound file name without extension           |
+
+**Returns:** Array of alarm IDs (UUID strings) for scheduled bells.
+
+**Example timeline with `intervalSeconds = 30` and `baseTimestamp = t`:**
+
+| Bell | Offset | Time        |
+| ---- | ------ | ----------- |
+| 1    | +1     | t + 30s     |
+| 2    | +2     | t + 60s     |
+| 3    | +3     | t + 90s     |
+| 4    | -1     | t - 30s     |
+| 5    | -2     | t - 60s     |
+| 6    | -3     | t - 90s     |
 
 ---
 
 ## 🎨 Types
-
 ```typescript
 interface CustomizableAlarmButton {
   text: string;       // Button label
@@ -462,14 +425,104 @@ type AlarmWeekday =
 
 ---
 
+## 🔄 Complete Usage Example
+```tsx
+import { useState } from 'react';
+import { View, Text, Pressable, Alert } from 'react-native';
+import {
+  isAvailable,
+  requestAlarmPermission,
+  scheduleTimer,
+  scheduleFixedAlarm,
+  scheduleProgressiveBells,
+  stopAlarm,
+  stopAllAlarms,
+} from 'react-native-nitro-ios-alarm-kit';
+
+export default function App() {
+  const [authorized, setAuthorized] = useState(false);
+  const [alarmIds, setAlarmIds] = useState<string[]>([]);
+
+  // 1. Check availability & request permission
+  const handleSetup = async () => {
+    if (!isAvailable()) {
+      Alert.alert('Error', 'AlarmKit requires iOS 26+');
+      return;
+    }
+    const result = await requestAlarmPermission();
+    setAuthorized(result);
+  };
+
+  // 2. Schedule a timer
+  const handleTimer = async () => {
+    const id = await scheduleTimer(
+      'Done!',
+      { text: 'Stop', textColor: '#FFF', icon: 'checkmark.circle.fill' },
+      '#FF6B6B',
+      10 // 10 seconds
+    );
+    if (id) setAlarmIds((prev) => [...prev, id]);
+  };
+
+  // 3. Schedule meditation bells
+  const handleBells = async () => {
+    const ids = await scheduleProgressiveBells(
+      'Breathe',
+      { text: 'OK', textColor: '#FFF', icon: 'leaf.fill' },
+      '#4ECDC4',
+      Date.now() / 1000 + 60, // Base: 1 min from now
+      10 // 10-second intervals
+    );
+    setAlarmIds((prev) => [...prev, ...ids]);
+  };
+
+  // 4. Stop last alarm
+  const handleStopLast = async () => {
+    if (alarmIds.length === 0) return;
+    const lastId = alarmIds[alarmIds.length - 1];
+    const success = await stopAlarm(lastId);
+    if (success) setAlarmIds((prev) => prev.slice(0, -1));
+  };
+
+  // 5. Stop all alarms
+  const handleStopAll = async () => {
+    const success = await stopAllAlarms();
+    if (success) setAlarmIds([]);
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20, gap: 12 }}>
+      <Text>Scheduled: {alarmIds.length} alarm(s)</Text>
+      <Pressable onPress={handleSetup}>
+        <Text>🔐 Request Permission</Text>
+      </Pressable>
+      <Pressable onPress={handleTimer} disabled={!authorized}>
+        <Text>⏱️ Schedule Timer</Text>
+      </Pressable>
+      <Pressable onPress={handleBells} disabled={!authorized}>
+        <Text>🧘 Schedule Bells</Text>
+      </Pressable>
+      <Pressable onPress={handleStopLast}>
+        <Text>⏹️ Stop Last</Text>
+      </Pressable>
+      <Pressable onPress={handleStopAll}>
+        <Text>🛑 Stop All</Text>
+      </Pressable>
+    </View>
+  );
+}
+```
+
+---
+
 ## 🧩 Platform Support
 
 | Platform          | Status                              |
 | ----------------- | ----------------------------------- |
 | **iOS 26+**       | ✅ Fully Supported                  |
-| **iOS < 26**      | ⚠️ Returns `false`                  |
+| **iOS < 26**      | ⚠️ Returns `false`/`null`/`[]`      |
 | **iOS Simulator** | ⚠️ Limited (permissions only)       |
-| **Android**       | ❌ No-op (returns `false`)          |
+| **Android**       | ❌ No-op (returns `false`/`null`/`[]`) |
 
 ---
 

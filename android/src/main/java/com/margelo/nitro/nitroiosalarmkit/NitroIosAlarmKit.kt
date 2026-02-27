@@ -7,30 +7,18 @@ import com.margelo.nitro.core.Promise
 class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
 
     override fun isAvailable(): Boolean {
-        // AlarmKit is iOS-only
         return false
     }
 
     override fun requestAlarmPermission(): Promise<Boolean> {
-        // No-op on Android
         return Promise.resolved(false)
     }
 
     override fun stopAllAlarms(): Promise<Boolean> {
-        // No-op on Android
         return Promise.resolved(false)
     }
 
-    override fun scheduleProgressiveBells(
-        title: String,
-        stopBtn: CustomizableAlarmButton,
-        tintColor: String,
-        baseTimestamp: Double,
-        intervalSeconds: Double,
-        secondaryBtn: CustomizableAlarmButton?,
-        soundName: String?
-    ): Promise<Boolean> {
-        // No-op on Android
+    override fun stopAlarm(alarmId: String): Promise<Boolean> {
         return Promise.resolved(false)
     }
 
@@ -42,9 +30,8 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         timestamp: Double?,
         countdown: AlarmCountdown?,
         soundName: String?
-    ): Promise<Boolean> {
-        // No-op on Android
-        return Promise.resolved(false)
+    ): Promise<String?> {
+        return Promise.resolved(null)
     }
 
     override fun scheduleRelativeAlarm(
@@ -57,9 +44,8 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         secondaryBtn: CustomizableAlarmButton?,
         countdown: AlarmCountdown?,
         soundName: String?
-    ): Promise<Boolean> {
-        // No-op on Android
-        return Promise.resolved(false)
+    ): Promise<String?> {
+        return Promise.resolved(null)
     }
 
     override fun scheduleTimer(
@@ -69,8 +55,19 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
         durationSeconds: Double,
         secondaryBtn: CustomizableAlarmButton?,
         soundName: String?
-    ): Promise<Boolean> {
-        // No-op on Android
-        return Promise.resolved(false)
+    ): Promise<String?> {
+        return Promise.resolved(null)
+    }
+
+    override fun scheduleProgressiveBells(
+        title: String,
+        stopBtn: CustomizableAlarmButton,
+        tintColor: String,
+        baseTimestamp: Double,
+        intervalSeconds: Double,
+        secondaryBtn: CustomizableAlarmButton?,
+        soundName: String?
+    ): Promise<Array<String>> {
+        return Promise.resolved(emptyArray())
     }
 }

@@ -37,36 +37,17 @@ export interface NitroIosAlarmKit
   requestAlarmPermission(): Promise<boolean>;
 
   /**
-   * Stop and delete all scheduled alarms
+   * Stop and cancel all scheduled/firing alarms
    * @returns true if successful
    */
   stopAllAlarms(): Promise<boolean>;
 
   /**
-   * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
-   * Useful for meditation bells that ring before and after the main time
-   *
-   * @param title - Keep under 15 chars for Dynamic Island
-   * @param stopBtn - Stop button config
-   * @param tintColor - Hex color (e.g., "#6B4EFF")
-   * @param baseTimestamp - Base Unix timestamp in seconds (the "t" reference point)
-   * @param intervalSeconds - Interval between bells in seconds
-   * @param secondaryBtn - Optional secondary button
-   * @param soundName - Sound file name without extension
-   *
-   * @example
-   * // Bells at: base+60s, base+120s, base+180s, base-60s, base-120s, base-180s
-   * scheduleProgressiveBells("Breathe", stopBtn, "#6B4EFF", timestamp, 60);
+   * Stop or cancel a specific alarm by ID
+   * @param alarmId - UUID string of the alarm to stop
+   * @returns true if successful
    */
-  scheduleProgressiveBells(
-    title: string,
-    stopBtn: CustomizableAlarmButton,
-    tintColor: string,
-    baseTimestamp: number,
-    intervalSeconds: number,
-    secondaryBtn?: CustomizableAlarmButton,
-    soundName?: string
-  ): Promise<boolean>;
+  stopAlarm(alarmId: string): Promise<boolean>;
 
   /**
    * Schedule an alarm at a fixed timestamp
@@ -78,6 +59,7 @@ export interface NitroIosAlarmKit
    * @param timestamp - Unix timestamp in seconds
    * @param countdown - Snooze duration config
    * @param soundName - Sound file name without extension (e.g., "magic" for magic.wav)
+   * @returns Alarm ID (UUID string) or null if failed
    */
   scheduleFixedAlarm(
     title: string,
@@ -87,7 +69,7 @@ export interface NitroIosAlarmKit
     timestamp?: number,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<boolean>;
+  ): Promise<string | null>;
 
   /**
    * Schedule a repeating alarm at a specific time
@@ -101,6 +83,7 @@ export interface NitroIosAlarmKit
    * @param secondaryBtn - Optional snooze button
    * @param countdown - Snooze duration config
    * @param soundName - Sound file name without extension
+   * @returns Alarm ID (UUID string) or null if failed
    */
   scheduleRelativeAlarm(
     title: string,
@@ -112,7 +95,7 @@ export interface NitroIosAlarmKit
     secondaryBtn?: CustomizableAlarmButton,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<boolean>;
+  ): Promise<string | null>;
 
   /**
    * Schedule a countdown timer
@@ -123,6 +106,7 @@ export interface NitroIosAlarmKit
    * @param durationSeconds - Timer duration in seconds
    * @param secondaryBtn - Optional secondary button
    * @param soundName - Sound file name without extension
+   * @returns Alarm ID (UUID string) or null if failed
    */
   scheduleTimer(
     title: string,
@@ -131,5 +115,28 @@ export interface NitroIosAlarmKit
     durationSeconds: number,
     secondaryBtn?: CustomizableAlarmButton,
     soundName?: string
-  ): Promise<boolean>;
+  ): Promise<string | null>;
+
+  /**
+   * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
+   * Useful for meditation bells that ring before and after the main time
+   *
+   * @param title - Keep under 15 chars for Dynamic Island
+   * @param stopBtn - Stop button config
+   * @param tintColor - Hex color (e.g., "#6B4EFF")
+   * @param baseTimestamp - Base Unix timestamp in seconds (the "t" reference point)
+   * @param intervalSeconds - Interval between bells in seconds
+   * @param secondaryBtn - Optional secondary button
+   * @param soundName - Sound file name without extension
+   * @returns Array of scheduled alarm IDs (UUID strings)
+   */
+  scheduleProgressiveBells(
+    title: string,
+    stopBtn: CustomizableAlarmButton,
+    tintColor: string,
+    baseTimestamp: number,
+    intervalSeconds: number,
+    secondaryBtn?: CustomizableAlarmButton,
+    soundName?: string
+  ): Promise<string[]>;
 }

@@ -54,19 +54,23 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleProgressiveBells(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, baseTimestamp: Double, intervalSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Boolean>
+  abstract fun stopAlarm(alarmId: String): Promise<Boolean>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<Boolean>
+  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String?>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?): Promise<Boolean>
+  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?): Promise<String?>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Boolean>
+  abstract fun scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<String?>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun scheduleProgressiveBells(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, baseTimestamp: Double, intervalSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Array<String>>
 
   private external fun initHybrid(): HybridData
 

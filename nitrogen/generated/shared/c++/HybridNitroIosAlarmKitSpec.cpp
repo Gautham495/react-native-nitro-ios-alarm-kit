@@ -17,10 +17,11 @@ namespace margelo::nitro::nitroiosalarmkit {
       prototype.registerHybridMethod("isAvailable", &HybridNitroIosAlarmKitSpec::isAvailable);
       prototype.registerHybridMethod("requestAlarmPermission", &HybridNitroIosAlarmKitSpec::requestAlarmPermission);
       prototype.registerHybridMethod("stopAllAlarms", &HybridNitroIosAlarmKitSpec::stopAllAlarms);
-      prototype.registerHybridMethod("scheduleProgressiveBells", &HybridNitroIosAlarmKitSpec::scheduleProgressiveBells);
+      prototype.registerHybridMethod("stopAlarm", &HybridNitroIosAlarmKitSpec::stopAlarm);
       prototype.registerHybridMethod("scheduleFixedAlarm", &HybridNitroIosAlarmKitSpec::scheduleFixedAlarm);
       prototype.registerHybridMethod("scheduleRelativeAlarm", &HybridNitroIosAlarmKitSpec::scheduleRelativeAlarm);
       prototype.registerHybridMethod("scheduleTimer", &HybridNitroIosAlarmKitSpec::scheduleTimer);
+      prototype.registerHybridMethod("scheduleProgressiveBells", &HybridNitroIosAlarmKitSpec::scheduleProgressiveBells);
     });
   }
 

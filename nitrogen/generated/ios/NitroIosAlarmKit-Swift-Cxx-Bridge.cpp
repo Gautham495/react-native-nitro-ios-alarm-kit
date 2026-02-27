@@ -29,6 +29,22 @@ namespace margelo::nitro::nitroiosalarmkit::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<void(const std::optional<std::string>& /* result */)>
+  Func_void_std__optional_std__string_ create_Func_void_std__optional_std__string_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroIosAlarmKit::Func_void_std__optional_std__string_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::optional<std::string>& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<std::string>& /* result */)>
+  Func_void_std__vector_std__string_ create_Func_void_std__vector_std__string_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroIosAlarmKit::Func_void_std__vector_std__string_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::vector<std::string>& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
   // pragma MARK: std::shared_ptr<HybridNitroIosAlarmKitSpec>
   std::shared_ptr<HybridNitroIosAlarmKitSpec> create_std__shared_ptr_HybridNitroIosAlarmKitSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
     NitroIosAlarmKit::HybridNitroIosAlarmKitSpec_cxx swiftPart = NitroIosAlarmKit::HybridNitroIosAlarmKitSpec_cxx::fromUnsafe(swiftUnsafePointer);
