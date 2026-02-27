@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-ios-alarm-kit",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Nitro module Library to use iOS 26+ Alarm Kit APIs",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
