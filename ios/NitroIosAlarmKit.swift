@@ -47,27 +47,33 @@ func stopAllAlarms() throws -> NitroModules.Promise<Bool> {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
             let manager = AlarmManager.shared
-            let alarms = await manager.alarms
-            var successCount = 0
+            
+            do {
+                let alarms = try manager.alarms
+                var successCount = 0
 
-            for alarm in alarms {
-                do {
-                    // Stop if firing, cancel if scheduled
-                    if case .alerting = alarm.state {
-                        try await manager.stop(id: alarm.id)
-                        print("⏹️ Stopped firing alarm: \(alarm.id)")
-                    } else {
-                        try await manager.cancel(id: alarm.id)
-                        print("🗑️ Cancelled alarm: \(alarm.id)")
+                for alarm in alarms {
+                    do {
+                        // Stop if firing, cancel if scheduled
+                        if case .alerting = alarm.state {
+                            try manager.stop(id: alarm.id)
+                            print("⏹️ Stopped firing alarm: \(alarm.id)")
+                        } else {
+                            try manager.cancel(id: alarm.id)
+                            print("🗑️ Cancelled alarm: \(alarm.id)")
+                        }
+                        successCount += 1
+                    } catch {
+                        print("⚠️ Failed to handle alarm \(alarm.id): \(error)")
                     }
-                    successCount += 1
-                } catch {
-                    print("⚠️ Failed to handle alarm \(alarm.id): \(error)")
                 }
-            }
 
-            print("✅ Handled \(successCount)/\(alarms.count) alarms")
-            return successCount > 0 || alarms.isEmpty
+                print("✅ Handled \(successCount)/\(alarms.count) alarms")
+                return successCount > 0 || alarms.isEmpty
+            } catch {
+                print("❌ Failed to get alarms: \(error)")
+                throw error
+            }
         }
         #endif
         return false
@@ -87,18 +93,18 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
                 return false
             }
 
-            // Find the alarm to check its state
-            let alarms = await manager.alarms
-            let targetAlarm = alarms.first { $0.id == uuid }
-
             do {
+                // Find the alarm to check its state
+                let alarms = try manager.alarms
+                let targetAlarm = alarms.first { $0.id == uuid }
+
                 if let alarm = targetAlarm, case .alerting = alarm.state {
                     // Alarm is currently firing - stop it
-                    try await manager.stop(id: uuid)
+                    try manager.stop(id: uuid)
                     print("⏹️ Stopped firing alarm: \(uuid)")
                 } else {
                     // Alarm is scheduled - cancel it
-                    try await manager.cancel(id: uuid)
+                    try manager.cancel(id: uuid)
                     print("🗑️ Cancelled alarm: \(uuid)")
                 }
                 return true
