@@ -194,7 +194,7 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func scheduleFixedAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____ {
+  public final func scheduleFixedAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.scheduleFixedAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), secondaryBtn: secondaryBtn.value, timestamp: { () -> Double? in
         if bridge.has_value_std__optional_double_(timestamp) {
@@ -211,30 +211,23 @@ open class HybridNitroIosAlarmKitSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-              switch __result {
-                case .first(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-                case .second(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-              }
-            }().variant) })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func scheduleRelativeAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, hour: Double, minute: Double, repeats: bridge.std__vector_AlarmWeekday_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____ {
+  public final func scheduleRelativeAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, hour: Double, minute: Double, repeats: bridge.std__vector_AlarmWeekday_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.scheduleRelativeAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), hour: hour, minute: minute, repeats: repeats.map({ __item in __item }), secondaryBtn: secondaryBtn.value, countdown: countdown.value, soundName: { () -> String? in
         if bridge.has_value_std__optional_std__string_(soundName) {
@@ -244,30 +237,23 @@ open class HybridNitroIosAlarmKitSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-              switch __result {
-                case .first(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-                case .second(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-              }
-            }().variant) })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func scheduleTimer(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, durationSeconds: Double, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____ {
+  public final func scheduleTimer(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, durationSeconds: Double, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.scheduleTimer(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), durationSeconds: durationSeconds, secondaryBtn: secondaryBtn.value, soundName: { () -> String? in
         if bridge.has_value_std__optional_std__string_(soundName) {
@@ -277,25 +263,18 @@ open class HybridNitroIosAlarmKitSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-              switch __result {
-                case .first(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-                case .second(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-              }
-            }().variant) })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
   
@@ -332,7 +311,7 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func scheduleAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____ {
+  public final func scheduleAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.scheduleAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), secondaryBtn: secondaryBtn.value, timestamp: { () -> Double? in
         if bridge.has_value_std__optional_double_(timestamp) {
@@ -349,30 +328,23 @@ open class HybridNitroIosAlarmKitSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-              switch __result {
-                case .first(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-                case .second(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-              }
-            }().variant) })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func scheduleAutoStopAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, ringCount: Double, ringDurationSeconds: bridge.std__optional_double_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____ {
+  public final func scheduleAutoStopAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, ringCount: Double, ringDurationSeconds: bridge.std__optional_double_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
       let __result = try self.__implementation.scheduleAutoStopAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), ringCount: ringCount, ringDurationSeconds: { () -> Double? in
         if bridge.has_value_std__optional_double_(ringDurationSeconds) {
@@ -396,25 +368,18 @@ open class HybridNitroIosAlarmKitSpec_cxx {
           return nil
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string___(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-              switch __result {
-                case .first(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-                case .second(let __value):
-                  return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-              }
-            }().variant) })
+          .then({ __result in __promiseHolder.resolve(std.string(__result)) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__variant_nitro__NullType__std__string____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__string___(__exceptionPtr)
     }
   }
 }

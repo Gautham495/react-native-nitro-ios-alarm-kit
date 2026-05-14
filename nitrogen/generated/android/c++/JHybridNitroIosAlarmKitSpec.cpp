@@ -16,11 +16,7 @@ namespace margelo::nitro::nitroiosalarmkit { enum class AlarmWeekday; }
 
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
-#include <NitroModules/Null.hpp>
 #include <string>
-#include <variant>
-#include "JVariant_NullType_String.hpp"
-#include <NitroModules/JNull.hpp>
 #include <vector>
 #include "CustomizableAlarmButton.hpp"
 #include "JCustomizableAlarmButton.hpp"
@@ -116,14 +112,14 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> JHybridNitroIosAlarmKitSpec::scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroIosAlarmKitSpec::scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JDouble> /* timestamp */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleFixedAlarm");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, timestamp.has_value() ? jni::JDouble::valueOf(timestamp.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<std::variant<nitro::NullType, std::string>>::create();
+      auto __promise = Promise<std::string>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JVariant_NullType_String>(__boxedResult);
-        __promise->resolve(__result->toCpp());
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -132,7 +128,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> JHybridNitroIosAlarmKitSpec::scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroIosAlarmKitSpec::scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* hour */, double /* minute */, jni::alias_ref<jni::JArrayClass<JAlarmWeekday>> /* repeats */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleRelativeAlarm");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), hour, minute, [&](auto&& __input) {
       size_t __size = __input.size();
@@ -145,10 +141,10 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __array;
     }(repeats), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<std::variant<nitro::NullType, std::string>>::create();
+      auto __promise = Promise<std::string>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JVariant_NullType_String>(__boxedResult);
-        __promise->resolve(__result->toCpp());
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -157,14 +153,14 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> JHybridNitroIosAlarmKitSpec::scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroIosAlarmKitSpec::scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* durationSeconds */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleTimer");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), durationSeconds, secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<std::variant<nitro::NullType, std::string>>::create();
+      auto __promise = Promise<std::string>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JVariant_NullType_String>(__boxedResult);
-        __promise->resolve(__result->toCpp());
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -198,14 +194,14 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> JHybridNitroIosAlarmKitSpec::scheduleAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroIosAlarmKitSpec::scheduleAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JDouble> /* timestamp */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleAlarm");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, timestamp.has_value() ? jni::JDouble::valueOf(timestamp.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<std::variant<nitro::NullType, std::string>>::create();
+      auto __promise = Promise<std::string>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JVariant_NullType_String>(__boxedResult);
-        __promise->resolve(__result->toCpp());
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -214,14 +210,14 @@ namespace margelo::nitro::nitroiosalarmkit {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> JHybridNitroIosAlarmKitSpec::scheduleAutoStopAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double ringCount, std::optional<double> ringDurationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
+  std::shared_ptr<Promise<std::string>> JHybridNitroIosAlarmKitSpec::scheduleAutoStopAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double ringCount, std::optional<double> ringDurationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* title */, jni::alias_ref<JCustomizableAlarmButton> /* stopBtn */, jni::alias_ref<jni::JString> /* tintColor */, double /* ringCount */, jni::alias_ref<jni::JDouble> /* ringDurationSeconds */, jni::alias_ref<JCustomizableAlarmButton> /* secondaryBtn */, jni::alias_ref<jni::JDouble> /* timestamp */, jni::alias_ref<JAlarmCountdown> /* countdown */, jni::alias_ref<jni::JString> /* soundName */)>("scheduleAutoStopAlarm");
     auto __result = method(_javaPart, jni::make_jstring(title), JCustomizableAlarmButton::fromCpp(stopBtn), jni::make_jstring(tintColor), ringCount, ringDurationSeconds.has_value() ? jni::JDouble::valueOf(ringDurationSeconds.value()) : nullptr, secondaryBtn.has_value() ? JCustomizableAlarmButton::fromCpp(secondaryBtn.value()) : nullptr, timestamp.has_value() ? jni::JDouble::valueOf(timestamp.value()) : nullptr, countdown.has_value() ? JAlarmCountdown::fromCpp(countdown.value()) : nullptr, soundName.has_value() ? jni::make_jstring(soundName.value()) : nullptr);
     return [&]() {
-      auto __promise = Promise<std::variant<nitro::NullType, std::string>>::create();
+      auto __promise = Promise<std::string>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JVariant_NullType_String>(__boxedResult);
-        __promise->resolve(__result->toCpp());
+        auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+        __promise->resolve(__result->toStdString());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);

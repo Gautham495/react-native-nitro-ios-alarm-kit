@@ -11,7 +11,6 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.Promise
-import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.HybridObject
 
 /**
@@ -48,15 +47,15 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<Variant_NullType_String>
+  abstract fun scheduleFixedAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?): Promise<Variant_NullType_String>
+  abstract fun scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: Array<AlarmWeekday>, secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Variant_NullType_String>
+  abstract fun scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<String>
   
   @DoNotStrip
   @Keep
@@ -64,11 +63,11 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<Variant_NullType_String>
+  abstract fun scheduleAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double?, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<Variant_NullType_String>
+  abstract fun scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double?, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

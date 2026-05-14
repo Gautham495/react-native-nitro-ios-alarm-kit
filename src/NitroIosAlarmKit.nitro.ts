@@ -69,7 +69,7 @@ export interface NitroIosAlarmKit
     timestamp?: number,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<string | null>;
+  ): Promise<string>;
 
   /**
    * Schedule a repeating alarm at a specific time
@@ -95,7 +95,7 @@ export interface NitroIosAlarmKit
     secondaryBtn?: CustomizableAlarmButton,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<string | null>;
+  ): Promise<string>;
 
   /**
    * Schedule a countdown timer
@@ -115,7 +115,7 @@ export interface NitroIosAlarmKit
     durationSeconds: number,
     secondaryBtn?: CustomizableAlarmButton,
     soundName?: string
-  ): Promise<string | null>;
+  ): Promise<string>;
 
   /**
    * Schedule progressive bells with pattern: t+1, t+2, t+3, t-1, t-2, t-3
@@ -160,7 +160,7 @@ export interface NitroIosAlarmKit
     timestamp?: number,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<string | null>;
+  ): Promise<string>;
 
   /**
    * Schedule an alarm that auto-stops after N rings.
@@ -187,5 +187,5 @@ export interface NitroIosAlarmKit
     timestamp?: number,
     countdown?: AlarmCountdown,
     soundName?: string
-  ): Promise<string | null>;
+  ): Promise<string>;
 }

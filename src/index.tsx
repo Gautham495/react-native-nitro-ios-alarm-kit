@@ -68,7 +68,7 @@ export function scheduleFixedAlarm(
   timestamp?: number,
   countdown?: AlarmCountdown,
   soundName?: string
-): Promise<string | null> {
+): Promise<string> {
   return NitroIosAlarmKitHybridObject.scheduleFixedAlarm(
     title,
     stopBtn,
@@ -104,7 +104,7 @@ export function scheduleRelativeAlarm(
   secondaryBtn?: CustomizableAlarmButton,
   countdown?: AlarmCountdown,
   soundName?: string
-): Promise<string | null> {
+): Promise<string> {
   return NitroIosAlarmKitHybridObject.scheduleRelativeAlarm(
     title,
     stopBtn,
@@ -136,7 +136,7 @@ export function scheduleTimer(
   durationSeconds: number,
   secondaryBtn?: CustomizableAlarmButton,
   soundName?: string
-): Promise<string | null> {
+): Promise<string> {
   return NitroIosAlarmKitHybridObject.scheduleTimer(
     title,
     stopBtn,
@@ -205,7 +205,7 @@ export function scheduleAutoStopAlarm(
   timestamp?: number,
   countdown?: AlarmCountdown,
   soundName?: string
-): Promise<string | null> {
+): Promise<string> {
   return NitroIosAlarmKitHybridObject.scheduleAutoStopAlarm(
     title,
     stopBtn,
@@ -228,5 +228,5 @@ export default {
   scheduleRelativeAlarm,
   scheduleTimer,
   scheduleProgressiveBells,
-  scheduleAutoStopAlarm
+  scheduleAutoStopAlarm,
 };

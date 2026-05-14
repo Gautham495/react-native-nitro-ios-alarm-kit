@@ -21,8 +21,6 @@ namespace margelo::nitro::nitroiosalarmkit { enum class AlarmWeekday; }
 
 #include <NitroModules/Promise.hpp>
 #include <string>
-#include <NitroModules/Null.hpp>
-#include <variant>
 #include "CustomizableAlarmButton.hpp"
 #include <optional>
 #include "AlarmCountdown.hpp"
@@ -111,7 +109,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+    inline std::shared_ptr<Promise<std::string>> scheduleFixedAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleFixedAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, secondaryBtn, timestamp, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -119,7 +117,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+    inline std::shared_ptr<Promise<std::string>> scheduleRelativeAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double hour, double minute, const std::vector<AlarmWeekday>& repeats, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleRelativeAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(hour)>(hour), std::forward<decltype(minute)>(minute), repeats, secondaryBtn, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -127,7 +125,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override {
+    inline std::shared_ptr<Promise<std::string>> scheduleTimer(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double durationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleTimer(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(durationSeconds)>(durationSeconds), secondaryBtn, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -143,7 +141,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> scheduleAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+    inline std::shared_ptr<Promise<std::string>> scheduleAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, secondaryBtn, timestamp, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -151,7 +149,7 @@ namespace margelo::nitro::nitroiosalarmkit {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::variant<nitro::NullType, std::string>>> scheduleAutoStopAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double ringCount, std::optional<double> ringDurationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
+    inline std::shared_ptr<Promise<std::string>> scheduleAutoStopAlarm(const std::string& title, const CustomizableAlarmButton& stopBtn, const std::string& tintColor, double ringCount, std::optional<double> ringDurationSeconds, const std::optional<CustomizableAlarmButton>& secondaryBtn, std::optional<double> timestamp, const std::optional<AlarmCountdown>& countdown, const std::optional<std::string>& soundName) override {
       auto __result = _swiftPart.scheduleAutoStopAlarm(title, std::forward<decltype(stopBtn)>(stopBtn), tintColor, std::forward<decltype(ringCount)>(ringCount), ringDurationSeconds, secondaryBtn, timestamp, countdown, soundName);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
