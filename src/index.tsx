@@ -200,7 +200,7 @@ export function scheduleAutoStopAlarm(
   stopBtn: CustomizableAlarmButton,
   tintColor: string,
   ringCount: number,
-  ringDurationSeconds?: number,
+  ringDurationSeconds: number,
   secondaryBtn?: CustomizableAlarmButton,
   timestamp?: number,
   countdown?: AlarmCountdown,

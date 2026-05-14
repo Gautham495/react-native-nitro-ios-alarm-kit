@@ -311,16 +311,9 @@ open class HybridNitroIosAlarmKitSpec_cxx {
   }
   
   @inline(__always)
-  public final func scheduleAutoStopAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, ringCount: Double, ringDurationSeconds: bridge.std__optional_double_, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
+  public final func scheduleAutoStopAlarm(title: std.string, stopBtn: CustomizableAlarmButton, tintColor: std.string, ringCount: Double, ringDurationSeconds: Double, secondaryBtn: bridge.std__optional_CustomizableAlarmButton_, timestamp: bridge.std__optional_double_, countdown: bridge.std__optional_AlarmCountdown_, soundName: bridge.std__optional_std__string_) -> bridge.Result_std__shared_ptr_Promise_std__string___ {
     do {
-      let __result = try self.__implementation.scheduleAutoStopAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), ringCount: ringCount, ringDurationSeconds: { () -> Double? in
-        if bridge.has_value_std__optional_double_(ringDurationSeconds) {
-          let __unwrapped = bridge.get_std__optional_double_(ringDurationSeconds)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }(), secondaryBtn: secondaryBtn.value, timestamp: { () -> Double? in
+      let __result = try self.__implementation.scheduleAutoStopAlarm(title: String(title), stopBtn: stopBtn, tintColor: String(tintColor), ringCount: ringCount, ringDurationSeconds: ringDurationSeconds, secondaryBtn: secondaryBtn.value, timestamp: { () -> Double? in
         if bridge.has_value_std__optional_double_(timestamp) {
           let __unwrapped = bridge.get_std__optional_double_(timestamp)
           return __unwrapped

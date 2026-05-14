@@ -63,7 +63,7 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double?, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
+  abstract fun scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String>
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

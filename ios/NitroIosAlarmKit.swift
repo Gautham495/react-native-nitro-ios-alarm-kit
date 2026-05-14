@@ -491,14 +491,14 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
         }
     }
 
-    // MARK: - Auto-Stop Alarm v2 (stops after N rings)
+// MARK: - Auto-Stop Alarm v2 (stops after N rings)
 
 func scheduleAutoStopAlarm(
     title: String,
     stopBtn: CustomizableAlarmButton,
     tintColor: String,
     ringCount: Double,
-    ringDurationSeconds: Double?,
+    ringDurationSeconds: Double,
     secondaryBtn: CustomizableAlarmButton?,
     timestamp: Double?,
     countdown: AlarmCountdown?,
@@ -539,9 +539,14 @@ func scheduleAutoStopAlarm(
 
             let presentation = AlarmPresentation(alert: alert)
 
+            // Use postAlert as the auto-stop mechanism — AlarmKit handles this natively
+            let perRing = ringDurationSeconds > 0 ? ringDurationSeconds : 5.0
+            let clampedCount = max(1.0, min(ringCount, 10.0))
+            let autoStopDuration = clampedCount * perRing
+
             let countdownDuration = Alarm.CountdownDuration(
                 preAlert: countdown?.preAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil },
-                postAlert: countdown?.postAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil }
+                postAlert: TimeInterval(autoStopDuration)
             )
 
             let attributes = AlarmAttributes<AlarmMetadataInfo>(
@@ -571,29 +576,7 @@ func scheduleAutoStopAlarm(
                     id: alarmId,
                     configuration: configuration
                 )
-                print("✅ Auto-stop alarm scheduled: \(alarmId)")
-
-                // Auto-stop after ringCount * ringDuration
-                let perRing = ringDurationSeconds ?? 5.0
-                let clampedCount = max(1.0, min(ringCount, 10.0))
-                let totalDuration = clampedCount * perRing
-
-                Task {
-                    try? await Task.sleep(nanoseconds: UInt64(totalDuration * 1_000_000_000))
-
-                    // Only stop if still alerting
-                    let alarms = try? manager.alarms
-                    let stillFiring = alarms?.first { $0.id == alarmId && {
-                        if case .alerting = $0.state { return true }
-                        return false
-                    }() }
-
-                    if stillFiring != nil {
-                        try? manager.stop(id: alarmId)
-                        print("🔕 Auto-stopped alarm after \(Int(clampedCount)) rings: \(alarmId)")
-                    }
-                }
-
+                print("✅ Auto-stop alarm scheduled: \(alarmId), auto-dismiss after \(autoStopDuration)s")
                 return alarmId.uuidString
             } catch {
                 print("❌ Auto-stop alarm failed: \(error)")
