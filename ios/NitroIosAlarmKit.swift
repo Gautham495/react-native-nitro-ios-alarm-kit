@@ -128,7 +128,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
         timestamp: Double?,
         countdown: AlarmCountdown?,
         soundName: String?
-    ) throws -> NitroModules.Promise<String?> {
+    ) throws -> NitroModules.Promise<String> {
         return NitroModules.Promise.async {
             #if canImport(AlarmKit)
             if #available(iOS 26.0, *) {
@@ -220,7 +220,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
         secondaryBtn: CustomizableAlarmButton?,
         countdown: AlarmCountdown?,
         soundName: String?
-    ) throws -> NitroModules.Promise<String?> {
+    ) throws -> NitroModules.Promise<String> {
         return NitroModules.Promise.async {
             #if canImport(AlarmKit)
             if #available(iOS 26.0, *) {
@@ -325,7 +325,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
         durationSeconds: Double,
         secondaryBtn: CustomizableAlarmButton?,
         soundName: String?
-    ) throws -> NitroModules.Promise<String?> {
+    ) throws -> NitroModules.Promise<String> {
         return NitroModules.Promise.async {
             #if canImport(AlarmKit)
             if #available(iOS 26.0, *) {
@@ -503,7 +503,7 @@ func scheduleAutoStopAlarm(
     timestamp: Double?,
     countdown: AlarmCountdown?,
     soundName: String?
-) throws -> NitroModules.Promise<String?> {
+) throws -> NitroModules.Promise<String> {
     return NitroModules.Promise.async {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
