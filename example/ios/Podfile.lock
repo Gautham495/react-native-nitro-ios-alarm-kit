@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.81.4):
     - hermes-engine/Pre-built (= 0.81.4)
   - hermes-engine/Pre-built (0.81.4)
-  - NitroIosAlarmKit (1.0.7):
+  - NitroIosAlarmKit (1.0.35):
     - boost
     - DoubleConversion
     - fast_float
@@ -38,7 +38,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroModules (0.29.8):
+  - NitroModules (0.35.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -2553,8 +2553,8 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 35c763d57c9832d0eef764316ca1c4d043581394
-  NitroIosAlarmKit: 3fba4d09294d4cb73335169a85754693c0354e10
-  NitroModules: 808eee1dfaf75b2c5a63ea3608cb651cc7d13687
+  NitroIosAlarmKit: 5e233ec06c7b42afcb2039adb5585a051d40f4de
+  NitroModules: 70e2ff77a0b718e47d5bccd837fefe8a9aa20f50
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: c0ed3249a97243002615517dff789bf4666cf585
   RCTRequired: 58719f5124f9267b5f9649c08bf23d9aea845b23
@@ -2621,6 +2621,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: a3ed390a19db0459bd6839823a6ac6d9c6db198d
 
-PODFILE CHECKSUM: 402fee566f72d597e7474bc6116eb6a2d2b6e3c1
+PODFILE CHECKSUM: e0ae3234993e7b4c1c46307ba58f628bf37fde7c
 
 COCOAPODS: 1.16.2

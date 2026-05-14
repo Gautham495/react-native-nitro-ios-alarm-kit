@@ -204,7 +204,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
                 }
             }
             #endif
-            return nil
+            return ""
         }
     }
 
@@ -312,7 +312,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
                 }
             }
             #endif
-            return nil
+            return ""
         }
     }
 
@@ -388,7 +388,7 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
                 }
             }
             #endif
-            return nil
+            return ""
         }
     }
 
@@ -601,7 +601,7 @@ func scheduleAutoStopAlarm(
             }
         }
         #endif
-        return nil
+        return ""
     }
 }
 
