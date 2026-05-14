@@ -70,4 +70,18 @@ class HybridNitroIosAlarmKit : HybridNitroIosAlarmKitSpec() {
     ): Promise<Array<String>> {
         return Promise.resolved(emptyArray())
     }
+
+    override fun scheduleAutoStopAlarm(
+    title: String,
+    stopBtn: CustomizableAlarmButton,
+    tintColor: String,
+    ringCount: Double,
+    ringDurationSeconds: Double?,
+    secondaryBtn: CustomizableAlarmButton?,
+    timestamp: Double?,
+    countdown: AlarmCountdown?,
+    soundName: String?
+    ): Promise<String?> {
+        return Promise.resolved(null)
+    }
 }

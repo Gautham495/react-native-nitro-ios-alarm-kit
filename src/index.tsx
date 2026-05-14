@@ -180,6 +180,45 @@ export function scheduleProgressiveBells(
   );
 }
 
+/**
+ * Schedule an alarm that auto-stops after N rings (v2).
+ * Useful for timers where persistent ringing is annoying.
+ *
+ * @param title - Keep under 15 chars for Dynamic Island
+ * @param stopBtn - Stop button config
+ * @param tintColor - Hex color (e.g., "#FF6B6B")
+ * @param ringCount - Number of rings before auto-stop (1-10, default 3)
+ * @param ringDurationSeconds - Duration of one ring cycle in seconds (default 5)
+ * @param secondaryBtn - Optional snooze button
+ * @param timestamp - Unix timestamp in seconds
+ * @param countdown - Snooze duration config
+ * @param soundName - Sound file name without extension
+ * @returns Alarm ID (UUID string) or null if failed
+ */
+export function scheduleAutoStopAlarm(
+  title: string,
+  stopBtn: CustomizableAlarmButton,
+  tintColor: string,
+  ringCount: number,
+  ringDurationSeconds?: number,
+  secondaryBtn?: CustomizableAlarmButton,
+  timestamp?: number,
+  countdown?: AlarmCountdown,
+  soundName?: string
+): Promise<string | null> {
+  return NitroIosAlarmKitHybridObject.scheduleAutoStopAlarm(
+    title,
+    stopBtn,
+    tintColor,
+    ringCount,
+    ringDurationSeconds,
+    secondaryBtn,
+    timestamp,
+    countdown,
+    soundName
+  );
+}
+
 export default {
   isAvailable,
   requestAlarmPermission,
@@ -189,4 +228,5 @@ export default {
   scheduleRelativeAlarm,
   scheduleTimer,
   scheduleProgressiveBells,
+  scheduleAutoStopAlarm
 };

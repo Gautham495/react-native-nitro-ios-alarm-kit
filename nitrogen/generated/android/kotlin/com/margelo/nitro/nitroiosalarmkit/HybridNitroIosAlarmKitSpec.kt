@@ -71,6 +71,14 @@ abstract class HybridNitroIosAlarmKitSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun scheduleProgressiveBells(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, baseTimestamp: Double, intervalSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?): Promise<Array<String>>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun scheduleAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String?>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double?, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?): Promise<String?>
 
   private external fun initHybrid(): HybridData
 

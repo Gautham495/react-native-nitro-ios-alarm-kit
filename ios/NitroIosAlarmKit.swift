@@ -491,6 +491,120 @@ func stopAlarm(alarmId: String) throws -> NitroModules.Promise<Bool> {
         }
     }
 
+    // MARK: - Auto-Stop Alarm v2 (stops after N rings)
+
+func scheduleAutoStopAlarm(
+    title: String,
+    stopBtn: CustomizableAlarmButton,
+    tintColor: String,
+    ringCount: Double,
+    ringDurationSeconds: Double?,
+    secondaryBtn: CustomizableAlarmButton?,
+    timestamp: Double?,
+    countdown: AlarmCountdown?,
+    soundName: String?
+) throws -> NitroModules.Promise<String?> {
+    return NitroModules.Promise.async {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            let manager = AlarmManager.shared
+
+            let stopButton = AlarmButton(
+                text: LocalizedStringResource(stringLiteral: stopBtn.text),
+                textColor: self.hexToColor(hex: stopBtn.textColor),
+                systemImageName: stopBtn.icon ?? "checkmark.circle.fill"
+            )
+
+            let alert: AlarmPresentation.Alert
+
+            if let btn = secondaryBtn {
+                let secondaryButton = AlarmButton(
+                    text: LocalizedStringResource(stringLiteral: btn.text),
+                    textColor: self.hexToColor(hex: btn.textColor),
+                    systemImageName: btn.icon ?? "repeat.circle.fill"
+                )
+
+                alert = AlarmPresentation.Alert(
+                    title: LocalizedStringResource(stringLiteral: title),
+                    stopButton: stopButton,
+                    secondaryButton: secondaryButton,
+                    secondaryButtonBehavior: .countdown
+                )
+            } else {
+                alert = AlarmPresentation.Alert(
+                    title: LocalizedStringResource(stringLiteral: title),
+                    stopButton: stopButton
+                )
+            }
+
+            let presentation = AlarmPresentation(alert: alert)
+
+            let countdownDuration = Alarm.CountdownDuration(
+                preAlert: countdown?.preAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil },
+                postAlert: countdown?.postAlert.flatMap { $0 > 0 ? TimeInterval($0) : nil }
+            )
+
+            let attributes = AlarmAttributes<AlarmMetadataInfo>(
+                presentation: presentation,
+                tintColor: self.hexToColor(hex: tintColor)
+            )
+
+            var schedule: Alarm.Schedule? = nil
+
+            if let timestamp = timestamp {
+                let date = Date(timeIntervalSince1970: timestamp)
+                schedule = Alarm.Schedule.fixed(date)
+            }
+
+            let sound = self.buildSound(soundName: soundName)
+
+            let configuration = AlarmManager.AlarmConfiguration(
+                countdownDuration: countdownDuration,
+                schedule: schedule,
+                attributes: attributes,
+                sound: sound
+            )
+
+            do {
+                let alarmId = UUID()
+                let _ = try await manager.schedule(
+                    id: alarmId,
+                    configuration: configuration
+                )
+                print("✅ Auto-stop alarm scheduled: \(alarmId)")
+
+                // Auto-stop after ringCount * ringDuration
+                let perRing = ringDurationSeconds ?? 5.0
+                let clampedCount = max(1.0, min(ringCount, 10.0))
+                let totalDuration = clampedCount * perRing
+
+                Task {
+                    try? await Task.sleep(nanoseconds: UInt64(totalDuration * 1_000_000_000))
+
+                    // Only stop if still alerting
+                    let alarms = try? manager.alarms
+                    let stillFiring = alarms?.first { $0.id == alarmId && {
+                        if case .alerting = $0.state { return true }
+                        return false
+                    }() }
+
+                    if stillFiring != nil {
+                        try? manager.stop(id: alarmId)
+                        print("🔕 Auto-stopped alarm after \(Int(clampedCount)) rings: \(alarmId)")
+                    }
+                }
+
+                return alarmId.uuidString
+            } catch {
+                print("❌ Auto-stop alarm failed: \(error)")
+                throw error
+            }
+        }
+        #endif
+        return nil
+    }
+}
+
     // MARK: - Helpers
 
     private func buildSound(soundName: String?) -> ActivityKit.AlertConfiguration.AlertSound {

@@ -22,6 +22,8 @@ namespace margelo::nitro::nitroiosalarmkit {
       prototype.registerHybridMethod("scheduleRelativeAlarm", &HybridNitroIosAlarmKitSpec::scheduleRelativeAlarm);
       prototype.registerHybridMethod("scheduleTimer", &HybridNitroIosAlarmKitSpec::scheduleTimer);
       prototype.registerHybridMethod("scheduleProgressiveBells", &HybridNitroIosAlarmKitSpec::scheduleProgressiveBells);
+      prototype.registerHybridMethod("scheduleAlarm", &HybridNitroIosAlarmKitSpec::scheduleAlarm);
+      prototype.registerHybridMethod("scheduleAutoStopAlarm", &HybridNitroIosAlarmKitSpec::scheduleAutoStopAlarm);
     });
   }
 

@@ -10311,7 +10311,7 @@ __metadata:
     react-native: "npm:0.81.4"
     react-native-builder-bob: "npm:^0.40.13"
     react-native-monorepo-config: "npm:^0.1.9"
-    react-native-nitro-modules: "npm:^0.29.8"
+    react-native-nitro-modules: "npm:^0.35.4"
   languageName: unknown
   linkType: soft
 
@@ -10368,6 +10368,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/0acc6ca5f12e24a6601e682070f257a771b95214c11fba911b342af705071234544c93076900f43400c8ae2f1a6738011b120e4425813968102997860ffd7626
+  languageName: node
+  linkType: hard
+
+"react-native-nitro-modules@npm:^0.35.4":
+  version: 0.35.6
+  resolution: "react-native-nitro-modules@npm:0.35.6"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/57ec2a2d2e57da923c5c8c81d28f323691be0373d528b81a1a6e1da0e6675f29faa443cc16babd0abd4cd5e08e51ff273ed04a139f368236662212f15cc3a678
   languageName: node
   linkType: hard
 
