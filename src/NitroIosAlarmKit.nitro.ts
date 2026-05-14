@@ -141,28 +141,6 @@ export interface NitroIosAlarmKit
   ): Promise<string[]>;
 
   /**
-   * Schedule an alarm (unified). Replaces scheduleFixedAlarm.
-   *
-   * @param title - Keep under 15 chars for Dynamic Island
-   * @param stopBtn - Stop button config
-   * @param tintColor - Hex color (e.g., "#FF6B6B")
-   * @param secondaryBtn - Optional snooze button
-   * @param timestamp - Unix timestamp in seconds
-   * @param countdown - Snooze duration config
-   * @param soundName - Sound file name without extension
-   * @returns Alarm ID (UUID string) or null if failed
-   */
-  scheduleAlarm(
-    title: string,
-    stopBtn: CustomizableAlarmButton,
-    tintColor: string,
-    secondaryBtn?: CustomizableAlarmButton,
-    timestamp?: number,
-    countdown?: AlarmCountdown,
-    soundName?: string
-  ): Promise<string>;
-
-  /**
    * Schedule an alarm that auto-stops after N rings.
    * Useful for timers where persistent ringing is annoying.
    *

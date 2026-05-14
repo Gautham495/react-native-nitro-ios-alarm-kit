@@ -21,7 +21,6 @@ public protocol HybridNitroIosAlarmKitSpec_protocol: HybridObject {
   func scheduleRelativeAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, hour: Double, minute: Double, repeats: [AlarmWeekday], secondaryBtn: CustomizableAlarmButton?, countdown: AlarmCountdown?, soundName: String?) throws -> Promise<String>
   func scheduleTimer(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, durationSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?) throws -> Promise<String>
   func scheduleProgressiveBells(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, baseTimestamp: Double, intervalSeconds: Double, secondaryBtn: CustomizableAlarmButton?, soundName: String?) throws -> Promise<[String]>
-  func scheduleAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?) throws -> Promise<String>
   func scheduleAutoStopAlarm(title: String, stopBtn: CustomizableAlarmButton, tintColor: String, ringCount: Double, ringDurationSeconds: Double?, secondaryBtn: CustomizableAlarmButton?, timestamp: Double?, countdown: AlarmCountdown?, soundName: String?) throws -> Promise<String>
 }
 
