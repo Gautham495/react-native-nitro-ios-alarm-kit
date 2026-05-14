@@ -76,7 +76,7 @@ override fun scheduleAutoStopAlarm(
     stopBtn: CustomizableAlarmButton,
     tintColor: String,
     ringCount: Double,
-    ringDurationSeconds: Double?,
+    ringDurationSeconds: Double,
     secondaryBtn: CustomizableAlarmButton?,
     timestamp: Double?,
     countdown: AlarmCountdown?,
